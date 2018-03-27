@@ -10,6 +10,13 @@
     border-top: 1px solid gray;
     border-radius: 10px;
 }
+.border-shadow {
+    border: 1px solid gray;
+    border-radius: 10px;
+    -moz-box-shadow:10px 10px 20px gray;
+    -webkit-box-shadow:10px 10px 20px gray;
+    box-shadow:10px 10px 20px gray;
+}
 .btn-sxp {
     background-color:rgb(78,201,142);
     color:white;
@@ -69,5 +76,20 @@
     display: inline-block;
     margin-right: 40px;
     font-size: 15px;
+}
+.box {
+    border:1px solid rgb(38,38,38);
+    border-radius: 10px;
+    padding: 30px 5px;
+}
+.box-title {
+    position: relative;
+    margin: auto;
+    top: -40px;
+    width: 30%;
+    color:black;
+    background-color: white;
+    text-align: center;
+    font-weight: bold;
 }
 
