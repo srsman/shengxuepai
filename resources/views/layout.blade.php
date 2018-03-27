@@ -9,6 +9,7 @@
     <link href="{{ URL::asset('css/app.css') }}" rel="stylesheet">
     <script>
         var _token = "{{ csrf_token() }}";
+        var URL = "{{ URL('/') }}";
     </script>
 </head>
 <body>
@@ -41,16 +42,18 @@
     </div>
 </nav>
 <hr/>
-<div class="row">
-    <div class="col-md-8 col-md-offset-2">
-        <ul class="ul-userinfo">
-            <li><img src="{{ URL::asset('images/project/vip.png') }}" width="100%"/></li>
-            <li>马楠萍 同学</li>
-            <li>全省位次 123456</li>
-            <li>理科</li>
-            <li>乐山一中</li>
-            <li>女</li>
-        </ul>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <ul class="ul-userinfo">
+                <li><img src="{{ URL::asset('images/project/vip.png') }}" width="100%"/></li>
+                <li>马楠萍 同学</li>
+                <li>全省位次 123456</li>
+                <li>理科</li>
+                <li>乐山一中</li>
+                <li>女</li>
+            </ul>
+        </div>
     </div>
 </div>
 <hr/>
@@ -73,5 +76,6 @@
 <script src="{{ URL::asset('js/jquery-3.2.1.min.js') }}"></script>
 <script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ URL::asset('js/login.js') }}"></script>
+@yield('script')
 </body>
 </html>
