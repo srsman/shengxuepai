@@ -20,3 +20,4 @@ Route::get('/test/{file}', function($file) {
 });
 
 Route::post('user/login', 'UserController@login');
+Route::post('user/register', 'UserController@login');
