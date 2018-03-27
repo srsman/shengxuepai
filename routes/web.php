@@ -14,3 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/test/{file}', function($file) {
+   return view($file);
+});
+
+Route::post('user/login', 'UserController@login');
