@@ -33,7 +33,8 @@
                                 <input type="password" id="password" class="form-control" value="" placeholder="请输入密码"/>
                             </div>
                         </div>
-                        <p class="text-center" style="margin: 50px"><button type="button" class="btn btn-sxp" id="signIn">登&nbsp;&nbsp;&nbsp;&nbsp;录</button></p>
+                        <p class="text-danger text-center" id="info">&nbsp;</p>
+                        <p class="text-center" style="margin: 30px"><button type="button" class="btn btn-sxp" id="signIn">登&nbsp;&nbsp;&nbsp;&nbsp;录</button></p>
                     </form>
                     <hr/>
                     <p class="text-center"><a href="#">注册账号</a> | <a href="#">忘记密码</a></p>
