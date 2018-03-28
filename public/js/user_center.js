@@ -41,11 +41,13 @@ function refresh_city() {
         }
         $("#city").html(str);
         $("#city").show();
+        _cityId = 0;  //重置ID避免BUG
     }
     refresh_country();
 }
 
 function refresh_country() {
+    console.log(_cityId);
     var str = '';
     if (typeof citylist[_provinceID].c[_cityId].a == 'undefined') {
         $("#country").hide();
