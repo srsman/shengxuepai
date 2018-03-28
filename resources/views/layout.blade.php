@@ -46,12 +46,12 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <ul class="ul-userinfo">
-                <li><img src="{{ URL::asset('images/project/vip.png') }}" width="100%"/></li>
-                <li>马楠萍 同学</li>
-                <li>全省位次 123456</li>
-                <li>理科</li>
-                <li>乐山一中</li>
-                <li>女</li>
+                <li><img data-toggle="tooltip" title="有效期至：{{Session::get('year')}}年8月31日" src="{{ URL::asset('images/project/vip.png') }}" width="100%"/></li>
+                <li>{{ Session::get('name') }} 同学</li>
+                <li>全省位次 {{ Session::get('rank') }}</li>
+                <li>{{ Session::get('classify') }}</li>
+                <li>{{ Session::get('school') }}</li>
+                <li>{{ Session::get('sex') }}</li>
             </ul>
         </div>
     </div>
