@@ -31,10 +31,10 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="navbar-a-underline"><a href="#">官&nbsp;&nbsp;网&nbsp;&nbsp;首&nbsp;&nbsp;页</a></li>
-                        <li class="navbar-a-underline navbar-a-active"><a href="#">功&nbsp;&nbsp;能&nbsp;&nbsp;区&nbsp;&nbsp;域</a></li>
-                        <li class="navbar-a-underline"><a href="#">信&nbsp;&nbsp;息&nbsp;&nbsp;修&nbsp;&nbsp;改</a></li>
+                        <li class="navbar-a-underline navbar-a-active"><a href="{{ URL('test/function_list') }}">功&nbsp;&nbsp;能&nbsp;&nbsp;区&nbsp;&nbsp;域</a></li>
+                        <li class="navbar-a-underline"><a href="{{ URL('test/change_info') }}">信&nbsp;&nbsp;息&nbsp;&nbsp;修&nbsp;&nbsp;改</a></li>
                         <li class="navbar-a-underline"><a href="#">帮&nbsp;&nbsp;助</a></li>
-                        <li class="navbar-a-underline"><a href="#">退&nbsp;&nbsp;出&nbsp;&nbsp;登&nbsp;&nbsp;录</a></li>
+                        <li class="navbar-a-underline"><a href="{{ URL('test/login') }}">退&nbsp;&nbsp;出&nbsp;&nbsp;登&nbsp;&nbsp;录</a></li>
                     </ul>
                 </div>
             </div>
@@ -65,8 +65,8 @@
     <div class="container">
         <ul class="sxp-footer-ul">
             <li><a href="#">官网首页</a></li>
-            <li><a href="#">功能区域</a></li>
-            <li><a href="#">信息修改</a></li>
+            <li><a href="{{ URL('test/function_list') }}">功能区域</a></li>
+            <li><a href="{{ URL('test/change_info') }}">信息修改</a></li>
             <li><a href="#">帮助</a></li>
         </ul>
         <p>Copyright©shengxuepai.cn 升学派—高考志愿填报专家　版权所有</p>
@@ -75,7 +75,9 @@
 </footer>
 <script src="{{ URL::asset('js/jquery-3.2.1.min.js') }}"></script>
 <script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ URL::asset('js/app.js') }}"></script>
 <script src="{{ URL::asset('js/login.js') }}"></script>
+
 @yield('script')
 </body>
 </html>

@@ -8,7 +8,8 @@
     <link href="{{ URL::asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ URL::asset('css/app.css') }}" rel="stylesheet">
     <script>
-        var _token = "{{ csrf_token() }}";
+        var  _token = "{{ csrf_token() }}";
+        var URL = "{{ URL('/') }}";
     </script>
 </head>
 <body>

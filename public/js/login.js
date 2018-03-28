@@ -13,7 +13,7 @@ $(document).ready(function(){
             $("#password").after('<p class="text-danger">密码不能为空</p>');
             $("#password").parent().addClass('has-error');
         } else {
-            $.post("/sxp/user/login", {
+            $.post(URL + "/user/login", {
                 username:username,
                 password:password,
                 _token : _token,
@@ -21,6 +21,7 @@ $(document).ready(function(){
                 if(response.status == true) {
 
                 } else {
+                    window.location.href = URL + '/test/function_list'
                     $("#signIn").parent().before('<p class="text-danger text-center">' + response.info + '</p>')
                 }
             })
