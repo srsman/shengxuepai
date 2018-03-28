@@ -11,7 +11,7 @@
     border-radius: 10px;
 }
 .border-shadow {
-    border: 1px solid gray;
+    border: 1px solid rgb(240,240,240);
     border-radius: 10px;
     -moz-box-shadow:10px 10px 20px gray;
     -webkit-box-shadow:10px 10px 20px gray;
@@ -91,5 +91,21 @@
     background-color: white;
     text-align: center;
     font-weight: bold;
+}
+.img-box {
+    border-radius:10px;
+    width: 184px;
+    height:186px;
+    padding-top: 130px;
+    cursor: pointer;
+}
+.img-box p {
+    color: white;
+    font-size: 28px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-family: 楷体;
 }
 
