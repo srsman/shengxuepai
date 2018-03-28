@@ -1,5 +1,6 @@
 @extends('layout')
 @section('main')
+    <img id="zoom"  width="400px" style="position: absolute;z-index: 1;">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <div class="row">
@@ -59,4 +60,7 @@
             </div>
         </div>
     </div>
+@endsection
+@section('script')
+    <script src="{{ URL::asset('js/function_list.js') }}"></script>
 @endsection
