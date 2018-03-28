@@ -47,7 +47,6 @@ function refresh_city() {
 }
 
 function refresh_country() {
-    console.log(_cityId);
     var str = '';
     if (typeof citylist[_provinceID].c[_cityId].a == 'undefined') {
         $("#country").hide();
