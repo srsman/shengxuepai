@@ -1,4 +1,7 @@
 @extends('layout')
+@section('title')
+高考成绩智能填报-升学派
+@endsection
 @section('navbar')
     <li class="navbar-a-underline navbar-a-active"><a href="javascript:;">高&nbsp;&nbsp;&nbsp;考&nbsp;&nbsp;&nbsp;成&nbsp;&nbsp;&nbsp;绩&nbsp;&nbsp;&nbsp;智&nbsp;&nbsp;&nbsp;能&nbsp;&nbsp;&nbsp;填&nbsp;&nbsp;&nbsp;报</a></li>
 @endsection
@@ -24,8 +27,8 @@
                             <tr>
                                 <th colspan="2">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="输入学校名称查询">
-                                        <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+                                        <input type="text" class="form-control" placeholder="输入学校名称查询" id="schoolName">
+                                        <div class="input-group-addon" id="search"><span class="glyphicon glyphicon-search"></span></div>
                                     </div>
                                 </th>
                                 <th colspan="3" class="text-center" style="vertical-align: middle">

@@ -11,6 +11,16 @@ $(document).ready(function(){
         }
     })
 
+    $("#search").click(function(){
+        searchBySchoolName($("#schoolName").val());
+    })
+
+    $("#schoolName").keyup(function() {
+        //if(event.keyCode === 13) {
+            searchBySchoolName($("#schoolName").val());
+        //}
+    })
+
     /**
      * FireFox浏览器特殊
      */
@@ -65,8 +75,20 @@ function init() {
             '<td><span class="glyphicon glyphicon-heart"></span></td>' +
             '</tr>'
     }
+    virLeft = 1;
+    virRight = 17;
     str += "<tr hidden class='text-center text-success'><td colspan='17'>到底啦~</td></tr>"
     $("#schoolTable").append(str);
     $("#schoolTable").children().eq(0).children(":lt("+virRight+")").show();
-    virPage = 1;
+
+}
+
+function searchBySchoolName(name) {
+    data = new Array();
+    for(var i = 0; i < originalData.length; i++) {
+        if(originalData[i].name.indexOf(name) !== -1) {
+            data.push(originalData[i])
+        }
+    }
+    init();
 }
