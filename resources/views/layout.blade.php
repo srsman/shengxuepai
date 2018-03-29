@@ -16,7 +16,7 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-10 col-md-offset-1">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                         <span class="sr-only">Toggle navigation</span>
@@ -30,9 +30,10 @@
                 </div>
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="navbar-a-underline"><a href="#">官&nbsp;&nbsp;网&nbsp;&nbsp;首&nbsp;&nbsp;页</a></li>
-                        <li class="navbar-a-underline navbar-a-active"><a href="{{ URL('test/function_list') }}">功&nbsp;&nbsp;能&nbsp;&nbsp;区&nbsp;&nbsp;域</a></li>
-                        <li class="navbar-a-underline"><a href="{{ URL('test/change_info') }}">信&nbsp;&nbsp;息&nbsp;&nbsp;修&nbsp;&nbsp;改</a></li>
+                        <li class="navbar-a-underline"><a href="http://www.shengxuepai.cn">官&nbsp;&nbsp;网&nbsp;&nbsp;首&nbsp;&nbsp;页</a></li>
+                        <li class="navbar-a-underline @if(isset($menu) && $menu == 'function_list')navbar-a-active @endif"><a href="{{ URL('functions') }}">功&nbsp;&nbsp;能&nbsp;&nbsp;区&nbsp;&nbsp;域</a></li>
+                        @yield('navbar')
+                        <li class="navbar-a-underline @if(isset($menu) && $menu == 'change_info')navbar-a-active @endif"><a href="{{ URL('change_info') }}">信&nbsp;&nbsp;息&nbsp;&nbsp;修&nbsp;&nbsp;改</a></li>
                         <li class="navbar-a-underline"><a href="#">帮&nbsp;&nbsp;助</a></li>
                         <li class="navbar-a-underline"><a href="{{ URL('test/login') }}">退&nbsp;&nbsp;出&nbsp;&nbsp;登&nbsp;&nbsp;录</a></li>
                     </ul>
@@ -44,9 +45,15 @@
 <hr/>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-10 col-md-offset-1">
             <ul class="ul-userinfo">
-                <li><img data-toggle="tooltip" title="有效期至：{{Session::get('year')}}年8月31日" src="{{ URL::asset('images/project/vip.png') }}" width="100%"/></li>
+                <li>
+                    <img data-toggle="tooltip"  src="{{ URL::asset('images/project/vip.png') }}" width="100%"/>
+                    <div class="tooltip fade top in" role="tooltip" style="top: -33px; left: -4px; display: block;z-index:2">
+                        <div class="tooltip-arrow" style="left: 50%;"></div>
+                        <div class="tooltip-inner">有效期至：{{ Session::get('year') }}年8月31日</div>
+                    </div>
+                </li>
                 <li>{{ Session::get('name') }} 同学</li>
                 <li>全省位次 {{ Session::get('rank') }}</li>
                 <li>{{ Session::get('classify') }}</li>
@@ -60,6 +67,7 @@
 <div class="container-fluid">
 @yield('main')
 </div>
+@yield('modal')
 <hr/>
 <footer class="sxp-footer">
     <div class="container">
@@ -76,8 +84,6 @@
 <script src="{{ URL::asset('js/jquery-3.2.1.min.js') }}"></script>
 <script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ URL::asset('js/app.js') }}"></script>
-<script src="{{ URL::asset('js/login.js') }}"></script>
-
 @yield('script')
 </body>
 </html>
