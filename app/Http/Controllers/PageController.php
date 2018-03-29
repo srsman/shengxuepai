@@ -7,8 +7,11 @@
  */
 
 namespace App\Http\Controllers;
-
-
+/**
+ * 静态页面调节路由
+ * Class PageController
+ * @package App\Http\Controllers
+ */
 class PageController extends Controller
 {
     public function login()
@@ -18,6 +21,15 @@ class PageController extends Controller
 
     public function functions()
     {
-        return view('function_list');
+        return view('function_list', [
+            'menu' => 'function_list',
+        ]);
+    }
+
+    public function changeInfo()
+    {
+        return view('change_info', [
+           'menu' => 'change_info'
+        ]);
     }
 }
