@@ -83,4 +83,38 @@ class UserController extends Controller
         }
         echo "ok";
     }
+
+    public function register(){
+
+    }
+
+    public function sms(){
+        $phone=18780225975;
+        $message=new \SmsDemo('', '');
+        $response = $message->sendSms(
+            "升学派", // 短信签名
+            "SMS_106550081", // 短信模板编号
+            "18780225975", // 短信接收者
+            Array(  // 短信模板中字段的值
+                "code"=>$this->Create_code(),
+                "product"=>"dsd"
+            ),
+            "123"
+        );
+        $response = $message->queryDetails(
+            "$phone",  // phoneNumbers 电话号码
+            date('Ymd'), // sendDate 发送时间
+            10, // pageSize 分页大小
+            1 // currentPage 当前页码
+        // "abcd" // bizId 短信发送流水号，选填
+        );
+        $response = (array)$response;
+        if($response['Code'] == 'OK')
+        {
+            echo 'ok';
+        }else
+        {
+            echo 'fail';
+        }
+    }
 }
