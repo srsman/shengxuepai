@@ -4,6 +4,12 @@ p,td,tr,th{
     -ms-user-select: none;
     user-select: none;
 }
+body ,html {
+    height: 100%;
+}
+body {
+    margin: 0px;
+}
 .border-shadow-left {
     border-left: 1px solid gray;
     border-radius: 10px;
@@ -22,6 +28,7 @@ p,td,tr,th{
     -moz-box-shadow:10px 10px 20px gray;
     -webkit-box-shadow:10px 10px 20px gray;
     box-shadow:10px 10px 20px gray;
+    background-color: white;
 }
 .btn-sxp {
     background-color:rgb(78,201,142);
@@ -114,3 +121,28 @@ p,td,tr,th{
     display: none;
 }
 
+.fetchbox td:hover {
+    background-color: rgb(78,201,142);
+    color: white;
+    z-index:2000;
+}
+
+.fetchbox-active {
+    background-color: rgb(78,201,142);
+    color: white;
+}
+.modal-background {
+    position: absolute;
+    top:0px;
+    left:0px;
+    background-color: rgba(0,0,0,0.2);
+    width:100%;
+    height:100%;
+    padding: 0px auto;
+    z-index: 1051;
+    display: none;
+}
+
+.modal-background *{
+    z-index:1052;
+}

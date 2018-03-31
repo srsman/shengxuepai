@@ -7,6 +7,7 @@
  */
 
 namespace App\Http\Controllers;
+use App\Model\MajorInfoModel;
 use App\Model\SchoolInfoModel;
 use Illuminate\Http\Request;
 
@@ -61,10 +62,10 @@ class FillController extends Controller
      */
     public function getSchoolList(Request $request)
     {
-//        $this->validate($request, [
-  //          'classify' => 'required|integer',
-    //        'batch' => 'required|integer',
-      //  ]);
+        $this->validate($request, [
+            'classify' => 'required|integer',
+            'batch' => 'required|integer',
+        ]);
         $res = SchoolInfoModel::select('school_id', 'name', 'city', 'province', 'rank','score_arg', 'position_arg', 'num_arg','page', 'gz')
             ->where([
                 ['classify', $request->get('classify')],
@@ -103,6 +104,31 @@ class FillController extends Controller
         return response()->json([
             'status' => true,
             'data' => $data
+        ]);
+    }
+
+    /**
+     * 获取指定学校、指定文理科，批次的专业列表及其信息
+     * @param Request $request
+     */
+    public function getSchoolMajor(Request $request)
+    {
+        $this->validate($request, [
+           'name' => 'required|string',
+            'classify' => 'required|int',
+            'batch' => 'required|int'
+        ]);
+
+        $res = MajorInfoModel::select('year', 'major_name', 'min_score', 'differ', 'number')
+            ->where([
+                ['school_name', $request->name],
+                ['classify', $request->classify],
+                ['batch', $request->batch],
+            ])->get();
+        $res = $res->toArray();
+        return response()->json([
+           'status' => true,
+           'data' => $res,
         ]);
     }
 }
