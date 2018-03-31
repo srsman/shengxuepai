@@ -110,4 +110,7 @@ p,td,tr,th{
     font-size: 28px;
     font-family: 楷体;
 }
+.forget{
+    display: none;
+}
 
