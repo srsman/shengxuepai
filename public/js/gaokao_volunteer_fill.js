@@ -1,7 +1,13 @@
 var data;
 var virLeft = 1;
 var virRight = 17;
+var mVirLeft = 1;
+var mVirRight = 17;
 var originalData;
+var majorData;
+var majorDataLen = 0;  //专业信息通过合成对象的方式生成 无法有效计算长度
+var target;
+var schoolName;
 
 $(document).ready(function(){
     $.get(URL + '/fill/get_school?classify=2&batch=2', function(response) {
@@ -27,6 +33,10 @@ $(document).ready(function(){
     })
 
     $('[data-toggle="fill"]').click(function () {
+        var batch = $(this).parent().parent().parent().parent().prev().children().eq(0).children().eq(0).html();
+        batch += $(this).parent().parent().parent().parent().prev().children().eq(1).children().eq(0).html();
+        $("#batchName").html(batch);
+        target = $(this).parent().parent().parent();
         data = originalData;
         init();
         $("#listModal").modal();
@@ -44,7 +54,7 @@ $(document).ready(function(){
     })
 
     /**
-     * FireFox浏览器特殊
+     * FireFox浏览器特殊 处理学校列表滚动
      */
     var stTarget = document.getElementById("schoolTable");
     stTarget.addEventListener("DOMMouseScroll", function(event) {
@@ -59,6 +69,22 @@ $(document).ready(function(){
         wheelMove(-event.wheelDelta);
     };
 
+    /**
+     * 处理专业列表滚动
+     */
+    var mtTarget = document.getElementById("majorTable");
+    mtTarget.addEventListener("DOMMouseScroll", function(event) {
+        majorWheelMove(event.detail)
+    });
+
+    /**
+     * 其他浏览器
+     */
+    mtTarget.onmousewheel = function(event) {
+        event = event || window.event;
+        majorWheelMove(-event.wheelDelta);
+    };
+
     $("#provinceFetch").on("click", "td", function(){
         if($(this).hasClass('fetchbox-active'))
             $(this).removeClass('fetchbox-active');
@@ -71,13 +97,13 @@ $(document).ready(function(){
      * 筛选省份
      */
     $(".glyphicon-th-list").click(function(){
-        $("#provinceList").children(".border-shadow").css('position', 'absolute');
-        $("#provinceList").children(".border-shadow").css('top', $(this).offset().top + 20);
+        $("#provinceList").children(".border-shadow").css('position', 'fixed');
+        $("#provinceList").children(".border-shadow").css('top', $(this).offset().top - document.documentElement.scrollTop+ 20);
         $("#provinceList").children(".border-shadow").css('left', $(this).offset().left - 300);
         $("#provinceList").fadeIn();
     })
     $(".modal-background").click(function () {
-        $(this).hide();
+        $(this).fadeOut();
     })
     /**
      * 筛选省份
@@ -163,10 +189,12 @@ $(document).ready(function(){
         $("#majorTable").children().eq(0).children(":gt(1)").remove();
         $("#majorTable").children().eq(0).append('<tr  class="text-center"><td colspan="15">数据请求中，请稍后</td></tr>')
 
-        var name = $(this).parent().parent().children().eq(1).html();
-        $.get(URL + '/fill/get_major?classify=2&batch=2&name=' + name, function(response){
+        schoolName = $(this).parent().parent().children().eq(1).html();
+        $("#schoolTitle").html(schoolName);
+        $.get(URL + '/fill/get_major?classify=2&batch=2&name=' + encodeURI(schoolName), function(response){
            if(response.status) {
                var info = {};
+
                for(var i = 0; i < response.data.length; i++) {
                    if(typeof info[response.data[i].major_name] == 'undefined') {
                        info[response.data[i].major_name] = {
@@ -180,33 +208,76 @@ $(document).ready(function(){
                    }
                    info[response.data[i].major_name][response.data[i].year] = [response.data[i].min_score, response.data[i].differ, response.data[i].number]
                }
-               var str = '';
-               for(row in info) {
-                   str += '<tr>' +
-                       '<td colspan="2">'+row+'</td>' +
-                       '<td>'+info[row].classify+'</td>' +
-                       '<td>'+ (info[row][2016][0] === 0 ? '-' : info[row][2016][0])+'</td>' +
-                       '<td>'+ (info[row][2016][1] === 0 ? '-' : info[row][2016][1])+'</td>' +
-                       '<td>'+ (info[row][2016][2] === 0 ? '-' : info[row][2016][2])+'</td>' +
-                       '<td>'+ (info[row][2015][0] === 0 ? '-' : info[row][2015][0])+'</td>' +
-                       '<td>'+ (info[row][2015][1] === 0 ? '-' : info[row][2015][1])+'</td>' +
-                       '<td>'+ (info[row][2015][2] === 0 ? '-' : info[row][2015][2])+'</td>' +
-                       '<td>'+ (info[row][2014][0] === 0 ? '-' : info[row][2014][0])+'</td>' +
-                       '<td>'+ (info[row][2014][1] === 0 ? '-' : info[row][2014][1])+'</td>' +
-                       '<td>'+ (info[row][2014][2] === 0 ? '-' : info[row][2014][2])+'</td>' +
-                       '<td>'+ (info[row][2017][0] === 0 ? '-' : info[row][2017][0])+'</td>' +
-                       '<td>-</td>' +
-                       '<td style="padding: 2px"><button class="btn btn-default btn-sm"  major-btn type="button"><span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;选择</button></td>' +
-                       '</tr>'
-               }
-
                $("#majorTable").children().eq(0).children(":gt(1)").remove();
-               $("#majorTable").append(str);
+               majorData = info;
+               initMajor();
            }
         })
-        $("#majorModal").modal();
+        $("#majorList").fadeIn();
     })
 
+    $("#majorTable").on("click", "[major-btn]", function(){
+
+        if($(this).hasClass('btn-sxp')) {
+            $(this).removeClass('btn-sxp');
+            $(this).addClass('btn-default')
+        } else {
+            if($(this).parent().parent().parent().find(".btn-sxp").length >= 6) {
+                var top = $(this).offset().top - 30;
+                var left = $(this).offset().left;
+                console.log($(this).offset());
+                $("#majorList").append(' <div class="tooltip fade top in" major-alert role="tooltip" style="top: '+top+'px; left: '+left+'px; display: block;z-index:1055">\n' +
+                    '                        <div class="tooltip-arrow" style="left: 50%;"></div>\n' +
+                    '                        <div class="tooltip-inner" >只能选择6个专业</div>\n' +
+                    '                    </div>')
+                window.setTimeout(function(){
+                    $("[major-alert]").fadeOut();
+                    $("[major-alert]").remove();
+                }, 2000)
+                return;
+            }
+            $(this).addClass('btn-sxp');
+            $(this).removeClass('btn-default')
+        }
+        return false;
+    })
+
+    $("#majorList").on('click', 'div', function () {
+        //禁止事件冒泡
+        return false;
+    })
+
+    $(".underline-p").draggable({
+        containment: ".form-horizontal",
+        revert: true
+    });
+    $(".underline-p").droppable({
+        drop : function(event, ui) {
+            $(this).css('color', 'black');
+            var t = $(ui.draggable).html();
+            $(ui.draggable).html($(this).html());
+            $(this).html(t);
+        },
+        over : function(event, ui) {
+            $(this).css('color', 'rgb(78,201,142)');
+        },
+        out : function(event, ui) {
+            $(this).css('color', 'black');
+        }
+    });
+
+    $("#save").click(function () {
+        var majors = [];
+        $("#majorTable").find(".btn-sxp").each(function(){
+            majors.push($(this).parent().parent().children().eq(0).html())
+        })
+        $(target).children().eq(0).children().eq(1).children().eq(0).html(schoolName);
+        for(var i = 0; i < majors.length; i++) {
+            $(target).children().eq( parseInt(i / 2) + 1).children().eq(i % 2 == 0 ? 1 : 3).children().eq(0).html(majors[i]);
+        }
+        $("#majorList").fadeOut();
+        $("#listModal").modal('hide');
+    })
 })
 
 function init() {
@@ -279,4 +350,58 @@ function wheelMove(angle) {
         var percentage = parseInt(virLeft * 100 / (data.length - 14));
         $("#progressBar").css("width", percentage + "%");
     }
+}
+
+function initMajor()
+{
+    majorDataLen = 0;
+    mVirLeft = 1;
+    mVirRight = 17;
+
+    var str = '';
+    for(row in majorData) {
+        majorDataLen++;
+        str += '<tr hidden>' +
+            '<td colspan="2">'+row+'</td>' +
+            '<td>'+majorData[row].classify+'</td>' +
+            '<td>'+ (majorData[row][2016][0] === 0 ? '-' : majorData[row][2016][0])+'</td>' +
+            '<td>'+ (majorData[row][2016][1] === 0 ? '-' : majorData[row][2016][1])+'</td>' +
+            '<td>'+ (majorData[row][2016][2] === 0 ? '-' : majorData[row][2016][2])+'</td>' +
+            '<td>'+ (majorData[row][2015][0] === 0 ? '-' : majorData[row][2015][0])+'</td>' +
+            '<td>'+ (majorData[row][2015][1] === 0 ? '-' : majorData[row][2015][1])+'</td>' +
+            '<td>'+ (majorData[row][2015][2] === 0 ? '-' : majorData[row][2015][2])+'</td>' +
+            '<td>'+ (majorData[row][2014][0] === 0 ? '-' : majorData[row][2014][0])+'</td>' +
+            '<td>'+ (majorData[row][2014][1] === 0 ? '-' : majorData[row][2014][1])+'</td>' +
+            '<td>'+ (majorData[row][2014][2] === 0 ? '-' : majorData[row][2014][2])+'</td>' +
+            '<td>'+ (majorData[row][2017][0] === 0 ? '-' : majorData[row][2017][0])+'</td>' +
+            '<td>-</td>' +
+            '<td style="padding: 2px"><button class="btn btn-default btn-sm"  style="padding: 5px 20px;" major-btn type="button"><span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;选择</button></td>' +
+            '</tr>'
+    }
+    str += "<tr hidden class='text-center text-success'><td colspan='15'>到底啦~</td></tr>"
+    $("#majorTable").append(str);
+    $("#majorTable").children().eq(0).children(":lt("+mVirRight+")").show();
+}
+
+function majorWheelMove(angle) {
+    if (majorDataLen <= 14) {
+        return;
+    }
+    if (angle > 0) {
+        mVirLeft += 5;
+        mVirRight += 5;
+    } else {
+        mVirLeft -= 5;
+        mVirRight -= 5;
+    }
+    if (mVirLeft <= 1) {
+        mVirLeft = 1;
+        mVirRight = 17;
+    }
+    if (mVirRight >= majorDataLen + 3) {
+        mVirLeft = majorDataLen - 13;
+        mVirRight = majorDataLen + 3;
+    }
+    $("#majorTable").children().eq(0).children(":gt(1)").hide();
+    $("#majorTable").children().eq(0).children(":lt(" + mVirRight + "):gt(" + mVirLeft + ")").show();
 }

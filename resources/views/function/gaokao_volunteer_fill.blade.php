@@ -7,8 +7,66 @@
 @endsection
 @section('main')
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <button class="btn btn-sxp" type="button" data-toggle="fill">填写志愿</button>
+        <div class="col-md-8 col-md-offset-2 border-shadow">
+            <h3 class="text-center"><b>本科第一批·志愿填报</b></h3>
+
+            @for($i = 1; $i <= 6; $i++)
+                <hr/>
+            <div class="row">
+                <div class="col-sm-3 text-center">
+                    <h4><b>第{{ $i }}志愿{{ chr(ord('A') + $i - 1) }}</b></h4>
+                    <h4><b>平行志愿</b></h4>
+                </div>
+                <div class="col-sm-9" style="border-left: 1px solid rgb(220,220,220)">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">院校</label>
+                            <div class="col-sm-4">
+                                <p class="form-control-static"></p>
+                            </div>
+                            <label class="col-sm-2 control-label">
+                                <button class="btn btn-sxp" type="button" data-toggle="fill">填写志愿</button>
+                            </label>
+                            <div class="col-sm-4">
+                                <label><input type="checkbox" > 专业调配</label>
+                                <label><input type="checkbox" > 定向调配</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">专业一</label>
+                            <div class="col-sm-4">
+                                <p class="form-control-static underline-p"></p>
+                            </div>
+                            <label class="col-sm-1 control-label">专业二</label>
+                            <div class="col-sm-4">
+                                <p class="form-control-static underline-p"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">专业三</label>
+                            <div class="col-sm-4 ">
+                                <p class="form-control-static underline-p"></p>
+                            </div>
+                            <label class="col-sm-1 control-label">专业四</label>
+                            <div class="col-sm-4">
+                                <p class="form-control-static underline-p"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">专业五</label>
+                            <div class="col-sm-4">
+                                <p class="form-control-static underline-p"></p>
+                            </div>
+                            <label class="col-sm-1 control-label">专业六</label>
+                            <div class="col-sm-4">
+                                <p class="form-control-static underline-p"></p>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            @endfor
         </div>
     </div>
 @endsection
@@ -18,7 +76,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title" id="myModalLabel">第一志愿C平行志愿·填报</h3>
+                <h3 class="modal-title" id="batchName">第一志愿C平行志愿·填报</h3>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -85,12 +143,12 @@
     </div>
 </div>
 
-<div class="modal fade" id="majorModal" tabindex="-1" role="dialog" aria-labelledby="majorModalLabel" style="z-index: 1053">
+<div class="modal-background" id="majorList">
     <div class="modal-dialog" role="document" style="width:70%">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" onclick='$("#majorList").fadeOut()' class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title" id="myModalLabel">XXX大学</h3>
+                <h3 class="modal-title" id="schoolTitle">XXX大学</h3>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -147,7 +205,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" onclick='$("#majorList").fadeOut()'>关闭</button>
-                <button type="button" class="btn btn-sxp">保存</button>
+                <button type="button" class="btn btn-sxp" id="save">保存</button>
             </div>
         </div>
     </div>
