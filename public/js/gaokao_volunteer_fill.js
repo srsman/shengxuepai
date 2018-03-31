@@ -223,10 +223,10 @@ $(document).ready(function(){
             $(this).addClass('btn-default')
         } else {
             if($(this).parent().parent().parent().find(".btn-sxp").length >= 6) {
-                var top = $(this).offset().top - 30;
+                var top = $(this).offset().top - 30 - document.documentElement.scrollTop;
                 var left = $(this).offset().left;
                 console.log($(this).offset());
-                $("#majorList").append(' <div class="tooltip fade top in" major-alert role="tooltip" style="top: '+top+'px; left: '+left+'px; display: block;z-index:1055">\n' +
+                $("#majorList").append(' <div class="tooltip fade top in" major-alert role="tooltip" style="position:fixed;top: '+top+'px; left: '+left+'px; display: block;z-index:1055">\n' +
                     '                        <div class="tooltip-arrow" style="left: 50%;"></div>\n' +
                     '                        <div class="tooltip-inner" >只能选择6个专业</div>\n' +
                     '                    </div>')
@@ -247,10 +247,12 @@ $(document).ready(function(){
         return false;
     })
 
-    $(".underline-p").draggable({
-        containment: ".form-horizontal",
-        revert: true
-    });
+    for(var i = 1; i <= 6; i++) {
+        $("[draggid-"+i+"]").draggable({
+            containment: "[draggpid-"+i+"]",
+            revert: true
+        });
+    }
     $(".underline-p").droppable({
         drop : function(event, ui) {
             $(this).css('color', 'black');
