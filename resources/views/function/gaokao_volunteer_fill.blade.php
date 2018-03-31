@@ -13,53 +13,55 @@
             @for($i = 1; $i <= 6; $i++)
                 <hr/>
             <div class="row">
-                <div class="col-sm-3 text-center">
+                <div class="col-sm-3 text-center" style="position: relative;top: 50%;transform: translateY(100%);">
                     <h4><b>第{{ $i }}志愿{{ chr(ord('A') + $i - 1) }}</b></h4>
                     <h4><b>平行志愿</b></h4>
                 </div>
                 <div class="col-sm-9" style="border-left: 1px solid rgb(220,220,220)">
-                    <form class="form-horizontal">
+                    <form class="form-horizontal" draggpid-{{$i}}>
                         <div class="form-group">
                             <label class="col-sm-1 control-label">院校</label>
                             <div class="col-sm-4">
                                 <p class="form-control-static"></p>
                             </div>
                             <label class="col-sm-2 control-label">
-                                <button class="btn btn-sxp" type="button" data-toggle="fill">填写志愿</button>
+                                <button class="btn btn-sxp" type="button" data-toggle="fill" style="margin-top: -8px">填写志愿</button>
                             </label>
-                            <div class="col-sm-4">
-                                <label><input type="checkbox" > 专业调配</label>
-                                <label><input type="checkbox" > 定向调配</label>
+                            <div class="col-sm-4" style="padding-top:5px">
+                                <span class="custom-checkbox" style="padding-left:30px;background:url({{ URL::asset('images/project/checkbox.gif') }}) no-repeat -10px -18px;"><b>专业调配</b></span>
+                                @if($i==1)
+                                    <span class="custom-checkbox" style="padding-left:30px;background:url({{ URL::asset('images/project/checkbox.gif') }}) no-repeat -10px -18px;"><b>定向调配</b></span>
+                                @endif
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-1 control-label">专业一</label>
                             <div class="col-sm-4">
-                                <p class="form-control-static underline-p"></p>
+                                <p class="form-control-static underline-p" draggid-{{$i}}></p>
                             </div>
                             <label class="col-sm-1 control-label">专业二</label>
                             <div class="col-sm-4">
-                                <p class="form-control-static underline-p"></p>
+                                <p class="form-control-static underline-p" draggid-{{$i}}></p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-1 control-label">专业三</label>
                             <div class="col-sm-4 ">
-                                <p class="form-control-static underline-p"></p>
+                                <p class="form-control-static underline-p" draggid-{{$i}}></p>
                             </div>
                             <label class="col-sm-1 control-label">专业四</label>
                             <div class="col-sm-4">
-                                <p class="form-control-static underline-p"></p>
+                                <p class="form-control-static underline-p" draggid-{{$i}}></p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-1 control-label">专业五</label>
                             <div class="col-sm-4">
-                                <p class="form-control-static underline-p"></p>
+                                <p class="form-control-static underline-p" draggid-{{$i}}></p>
                             </div>
                             <label class="col-sm-1 control-label">专业六</label>
                             <div class="col-sm-4">
-                                <p class="form-control-static underline-p"></p>
+                                <p class="form-control-static underline-p" draggid-{{$i}}></p>
                             </div>
                         </div>
 

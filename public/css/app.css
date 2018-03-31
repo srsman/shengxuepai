@@ -1,4 +1,4 @@
-p,td,tr,th{
+p,td,tr,th,span{
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
