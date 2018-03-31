@@ -12,7 +12,9 @@ namespace App\Http\Controllers;
 use App\Model\AccountModel;
 use App\Model\UserModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use App\Libs\dysms_php\api_demo\SmsDemo;
 
 class UserController extends Controller
 {
@@ -84,18 +86,118 @@ class UserController extends Controller
         echo "ok";
     }
 
-    public function register(){
+    public function register(Request $request){
+        $cellphone = $request->get('cellphone');
+        $code = $request->get('code');
+        $password = $request->get('password');
+        $password2 = $request->get('password2');
+        if($cellphone==''){
+            return response()->json([
+                'status' => false,
+            ]);
+        }else{
+            $user=AccountModel::select('user_id')->where('phone',$cellphone)->get();
+            if(!$user->isEmpty()){
+                return response()->json([
+                    'status' => false,
+                    'info' => '账号已存在',
+                ]);
+            }
+            elseif(time()-Session::get('code_time')>300){
+                Session::forget('code');
+                Session::forget('code_time');
+                return response()->json([
+                    'status' => false,
+                    'info' => '验证码过期，请重新获取',
+                ]);
+            }elseif ($code!=Session::get('code')){
+                return response()->json([
+                    'status' => false,
+                    'info' => '验证码错误！',
+                ]);
+            }elseif($password==''||$password2==''||$password!=$password2){
+                return response()->json([
+                    'status' => false,
+                ]);
+            }else{
+                $user = AccountModel::insertGetId(['user'=>$cellphone,'pass'=>md5($password),'phone'=>$cellphone]);
+                if($user)
+                {
+                    return response()->json([
+                        'status' => true,
+                        'info' => '注册成功！',
+                    ]);
+                }else{
+                    return response()->json([
+                        'status' => false,
+                        'info' => '注册失败！',
+                    ]);
+                }
+            }
+        }
+    }
 
+    public function check(){
+        $phone=\request('phone');
+        $user=AccountModel::select('user_id')->where('phone',$phone)->get();
+        if(!$user->isEmpty()){
+            echo 'yes';
+        }else{
+            echo 'no';
+        }
+    }
+
+    public function forget(){
+        $phone = \request('phone');
+        $code = \request('code');
+        if($code==session('code')&&$phone==session('phone')&&time()-session('code_time')<=300){
+            return response()->json(['status' => true]);
+        }elseif($code!=session('code')||$phone!=session('phone')||time()-session('code_time')>300){
+            return response()->json([
+                'status' => false,
+                'info' => '验证码错误！',
+            ]);
+        }
+    }
+
+    public function modify(){
+        $phone = \request('phone');
+        $code = \request('code');
+        $password1=\request('password1');
+        $password2=\request('password2');
+        if($phone==''||$code==''||$password1==''||$password2==''||$password1!=$password2){
+            return response()->json(['status' => false]);
+        }elseif($code!=session('code')||$phone!=session('phone')||time()-session('code_time')>300){
+            return response()->json([
+                'status' => false,
+                'info' => '验证码错误！',
+            ]);
+        }elseif($code==session('code')&&$phone==session('phone')&&time()-session('code_time')<=300&&$password1==$password2){
+            $num = AccountModel::where('phone',$phone)->update(['pass'=>md5($password1)]);
+            if($num){
+                return response()->json([
+                    'status' => true,
+                    'info' => '密码修改成功！',
+                ]);
+            }else{
+                return response()->json([
+                    'status' => false,
+                    'info' => '密码修改失败！',
+                ]);
+            }
+        }
     }
 
     public function sms(){
-        $phone=18780225975;
-        $message=new \SmsDemo('', '');
+        $phone=\request('phone');
+        Session::put('phone',$phone);
+        $message=new SmsDemo(env('ACCESS_KEY_ID'), env('ACCESS_KEY_SECRET'));
         $response = $message->sendSms(
             "升学派", // 短信签名
             "SMS_106550081", // 短信模板编号
-            "18780225975", // 短信接收者
+            "$phone", // 短信接收者
             Array(  // 短信模板中字段的值
+//                "code"=>$this->Create_code(),
                 "code"=>$this->Create_code(),
                 "product"=>"dsd"
             ),
@@ -116,5 +218,12 @@ class UserController extends Controller
         {
             echo 'fail';
         }
+    }
+
+    public function Create_code(){
+        $code=rand(100000,999999);
+        Session::put('code',$code);
+        Session::put('code_time',time());
+        return $code;
     }
 }
