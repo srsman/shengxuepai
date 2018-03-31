@@ -7,6 +7,7 @@
     <title>@yield('title')</title>
     <link href="{{ URL::asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ URL::asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ URL::asset('css/jquery-ui.css') }}" rel="stylesheet">
     <script>
         var _token = "{{ csrf_token() }}";
         var URL = "{{ URL('/') }}";
@@ -84,6 +85,7 @@
 <script src="{{ URL::asset('js/jquery-3.2.1.min.js') }}"></script>
 <script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ URL::asset('js/app.js') }}"></script>
+<script src="{{ URL::asset('js/jquery-ui.js') }}"></script>
 @yield('script')
 </body>
 </html>
