@@ -8,9 +8,16 @@ var majorData;
 var majorDataLen = 0;  //专业信息通过合成对象的方式生成 无法有效计算长度
 var target;
 var schoolName;
+var selected = [ [],[],[],[],[],[]];
+var selectedMajor;
 
 $(document).ready(function(){
-    $.get(URL + '/fill/get_school?classify=2&batch=2', function(response) {
+
+    window.onbeforeunload = function(){
+        return "当前页面还未保存，确认离开吗?";
+    }
+
+    $.get(URL + '/fill/get_school?classify='+classify+'&batch=' + batch, function(response) {
         if (response.status == true) {
             for(var i = 0; i < response.data.length; i++) {
                 if (typeof response.data[i].avg == 'undefined') {
@@ -186,12 +193,20 @@ $(document).ready(function(){
     })
 
     $("#schoolTable").on("click", "[select-btn]", function(){
+        console.log(selected)
         $("#majorTable").children().eq(0).children(":gt(1)").remove();
         $("#majorTable").children().eq(0).append('<tr  class="text-center"><td colspan="15">数据请求中，请稍后</td></tr>')
 
         schoolName = $(this).parent().parent().children().eq(1).html();
+        selectedMajor = [];
+        for(var i = 0; i < selected.length; i++) {
+            if(selected[i][0] == schoolName) {
+                selectedMajor = selected[i][1];
+                break;
+            }
+        }
         $("#schoolTitle").html(schoolName);
-        $.get(URL + '/fill/get_major?classify=2&batch=2&name=' + encodeURI(schoolName), function(response){
+        $.get(URL + '/fill/get_major?classify='+classify+'&batch='+batch+'&name=' + encodeURI(schoolName), function(response){
            if(response.status) {
                var info = {};
 
@@ -274,11 +289,54 @@ $(document).ready(function(){
             majors.push($(this).parent().parent().children().eq(0).html())
         })
         $(target).children().eq(0).children().eq(1).children().eq(0).html(schoolName);
+        var id = $("#fillList").children().index($(target).parent().parent());
+        selected[id / 2 - 1] = [schoolName, []];
+
         for(var i = 0; i < majors.length; i++) {
+            selected[id / 2 - 1][1].push(majors[i]);
             $(target).children().eq( parseInt(i / 2) + 1).children().eq(i % 2 == 0 ? 1 : 3).children().eq(0).html(majors[i]);
         }
         $("#majorList").fadeOut();
         $("#listModal").modal('hide');
+    })
+
+    $("#submit").click(function(){
+        if($("#tableName").val().length == 0) {
+            $("#tableName").parent().addClass('has-error');
+            return;
+        }
+
+        $("#tableName").parent().removeClass('has-error');
+
+        var info = {};
+        $("#fillList").find(".row").each(function(index){
+            var form = $(this).find(".form-horizontal");
+            var tmp = {};
+            $(form).find(".form-control-static").each(function(index){
+                if(index == 0) //school
+                    tmp.s = $(this).html();
+                else
+                    tmp["m" + index] = $(this).html();
+            })
+            tmp.o = $(form).find('.custom-checkbox').eq(0).css('background-position') === '-10px -218px' ? 1 : 0;
+            if(index == 0)
+                info.o = $(form).find('.custom-checkbox').eq(1).css('background-position') === '-10px -218px' ? 1 : 0;
+
+            info[index] = tmp;
+        })
+        info = JSON.stringify(info);
+        if(info.length <= 409 ) {
+            $("#submit_info").html("还未填写任何内容");
+            return;
+        }
+        $.post(URL + "/fill/save_vol", {info:info, _token:_token, type:type,batch:batch,table_name:$("#tableName").val()}, function(response){
+            if(response.status == true) {
+                $("#submit_info").html("保存成功");
+            } else {
+                $("#submit_info").html("保存失败");
+            }
+        });
+        $("#submit_info").html("保存中，请稍后......");
     })
 })
 
@@ -303,9 +361,17 @@ function init() {
             '<td>' + (data[i].infos[2015][1] === 0 ? '-' : data[i].infos[2015][1]) + '</td>' +
             '<td>' + (data[i].infos[2015][2] === 0 ? '-' : data[i].infos[2015][2]) + '</td>' +
             '<td>' + (data[i].infos[2018][0] === 0 ? '-' : data[i].infos[2018][0]) + '</td>' +
-            '<td>' + (data[i].infos[2018][1] === 0 ? '-' : data[i].infos[2018][1]) + '</td>' +
-            '<td style="padding: 2px"><button class="btn btn-default btn-sm"  select-btn type="button"><span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;选择</button></td>' +
-            '</tr>'
+            '<td>' + (data[i].infos[2018][1] === 0 ? '-' : data[i].infos[2018][1]) + '</td>';
+        var findSig = false;
+        for(var j = 0; j < 6; j++)
+            if(selected[j][0] == data[i].name) {
+                str += '<td style="padding: 2px"><button class="btn btn-sxp btn-sm"  style="padding: 5px 20px;" select-btn type="button"><span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;选择</button></td>';
+                findSig = true;
+                break;
+            }
+        if(!findSig)
+            str += '<td style="padding: 2px"><button class="btn btn-default btn-sm"  style="padding: 5px 20px;" select-btn type="button"><span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;选择</button></td>';
+        str += '</tr>'
     }
     virLeft = 1;
     virRight = 17;
@@ -376,9 +442,17 @@ function initMajor()
             '<td>'+ (majorData[row][2014][1] === 0 ? '-' : majorData[row][2014][1])+'</td>' +
             '<td>'+ (majorData[row][2014][2] === 0 ? '-' : majorData[row][2014][2])+'</td>' +
             '<td>'+ (majorData[row][2017][0] === 0 ? '-' : majorData[row][2017][0])+'</td>' +
-            '<td>-</td>' +
-            '<td style="padding: 2px"><button class="btn btn-default btn-sm"  style="padding: 5px 20px;" major-btn type="button"><span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;选择</button></td>' +
-            '</tr>'
+            '<td>-</td>';
+        var findSig = false;
+        for(var j = 0; j < selectedMajor.length; j++)
+            if(selectedMajor[j] == row) {
+                str += '<td style="padding: 2px"><button class="btn btn-sxp btn-sm"  style="padding: 5px 20px;" major-btn type="button"><span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;选择</button></td>';
+                findSig = true;
+                break;
+            }
+        if(!findSig)
+            str += '<td style="padding: 2px"><button class="btn btn-default btn-sm"  style="padding: 5px 20px;" major-btn type="button"><span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;选择</button></td>';
+        str += '</tr>';
     }
     str += "<tr hidden class='text-center text-success'><td colspan='15'>到底啦~</td></tr>"
     $("#majorTable").append(str);
