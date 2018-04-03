@@ -36,7 +36,7 @@
                         @yield('navbar')
                         <li class="navbar-a-underline @if(isset($menu) && $menu == 'change_info')navbar-a-active @endif"><a href="{{ URL('change_info') }}">信&nbsp;&nbsp;息&nbsp;&nbsp;修&nbsp;&nbsp;改</a></li>
                         <li class="navbar-a-underline"><a href="#">帮&nbsp;&nbsp;助</a></li>
-                        <li class="navbar-a-underline"><a href="{{ URL('test/login') }}">退&nbsp;&nbsp;出&nbsp;&nbsp;登&nbsp;&nbsp;录</a></li>
+                        <li class="navbar-a-underline"><a href="{{ URL('login') }}">退&nbsp;&nbsp;出&nbsp;&nbsp;登&nbsp;&nbsp;录</a></li>
                     </ul>
                 </div>
             </div>
@@ -52,7 +52,7 @@
                     <img data-toggle="tooltip"  src="{{ URL::asset('images/project/vip.png') }}" width="100%"/>
                     <div class="tooltip fade top in" role="tooltip" style="top: -33px; left: -4px; display: block;z-index:2">
                         <div class="tooltip-arrow" style="left: 50%;"></div>
-                        <div class="tooltip-inner">有效期至：{{ Session::get('year') }}年8月31日</div>
+                        <div class="tooltip-inner">有效期至：20{{ Session::get('time_limit') }}年8月31日</div>
                     </div>
                 </li>
                 <li>{{ Session::get('name') }} 同学</li>

@@ -7,7 +7,7 @@
 @endsection
 @section('main')
     <div class="row">
-        <div class="col-md-8 col-md-offset-2 border-shadow">
+        <div class="col-md-8 col-md-offset-2 border-shadow" id="fillList">
             <h3 class="text-center"><b>本科第一批·志愿填报</b></h3>
 
             @for($i = 1; $i <= 6; $i++)
@@ -69,6 +69,19 @@
                 </div>
             </div>
             @endfor
+            <hr/>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-sm-2 col-sm-offset-2">志愿表名称</label>
+                    <div class="col-sm-4">
+                        <input type="text" value="" class="form-control" id="tableName" placeholder="请输入志愿表名称"/>
+                        <p id="submit_info" class="text-danger text-center"></p>
+                    </div>
+                    <div class="col-sm-2">
+                        <button class="btn btn-sxp" type="button" id="submit">保存</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 @endsection
@@ -268,5 +281,10 @@
 </div>
 @endsection
 @section('script')
+<script>
+    var type = 1;
+    var classify = 2;
+    var batch = 1;
+</script>
 <script src="{{ URL::asset('./js/gaokao_volunteer_fill.js') }}"></script>
 @endsection
