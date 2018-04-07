@@ -14,6 +14,7 @@
             static : true, //数据滚动时，不请求数据，data中存放完整数据
             dataHandle : function(data){},
             userHandle : {},
+            userHandleLocal : {},
         };
         var settings = $.extend({}, defaults, options);
 
@@ -41,13 +42,19 @@
             wheelMove(-event.wheelDelta);
         };
         for(var functionName in settings.userHandle) {
-            window.addEventListener(functionName, function(e){
-                settings.data = eval("settings.userHandle" + "." + functionName + "(settings.originalData)");
-                virLeft = 0;
-                render();
-            });
+            eval('window.addEventListener("'+functionName+'", function(e){ ' +
+                ' settings.data = settings.userHandle.'+functionName+'(settings.originalData);' +
+                ' virLeft = 0; ' +
+                ' render(); ' +
+            '});');
         }
-
+        for(var functionName in settings.userHandleLocal) {
+            eval('window.addEventListener("'+functionName+'", function(e){ ' +
+                ' settings.data = settings.userHandleLocal.'+functionName+'(settings.data);' +
+                ' virLeft = 0; ' +
+                ' render(); ' +
+                '});');
+        }
         /**
          * 根据虚拟的左右指针渲染数据
          */
