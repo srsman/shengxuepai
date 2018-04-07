@@ -86,6 +86,7 @@
 <script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ URL::asset('js/app.js') }}"></script>
 <script src="{{ URL::asset('js/jquery-ui.js') }}"></script>
+<script src="{{ URL::asset('js/multiLineTable.js') }}"></script>
 @yield('script')
 </body>
 </html>
