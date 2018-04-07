@@ -43,6 +43,7 @@
         for(var functionName in settings.userHandle) {
             window.addEventListener(functionName, function(e){
                 settings.data = eval("settings.userHandle" + "." + functionName + "(settings.originalData)");
+                virLeft = 0;
                 render();
             });
         }
@@ -69,6 +70,10 @@
          * @param angle
          */
         function wheelMove(angle) {
+            if(settings.data.length < settings.length) {
+                return;
+            }
+
             if(angle > 0) { //向下
                 virLeft += settings.wheelLength;
             } else {
