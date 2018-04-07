@@ -1,15 +1,13 @@
-var data;
-var virLeft = 1;
-var virRight = 17;
 var mVirLeft = 1;
 var mVirRight = 17;
-var originalData;
+
 var majorData;
 var majorDataLen = 0;  //专业信息通过合成对象的方式生成 无法有效计算长度
 var target;
 var schoolName;
 var selected = [ [],[],[],[],[],[]];
 var selectedMajor;
+var sortTarget;
 
 $(document).ready(function(){
 
@@ -34,64 +32,183 @@ $(document).ready(function(){
                     response.data[i].avg = parseInt(avg);
                 }
             }
-            originalData = data = response.data;
-            init();
+            $("#schoolTable").multiLineTable({
+                data : response.data,
+                dataHandle : function(data) {
+                    var str ='<tr>' +
+                            '<td>1%</td>' +
+                            '<td>' + data.name + '</td>' +
+                            '<td>' + data.address + '</td>' +
+                            '<td>' + (data.rank == null ? '-' : data.rank) + '</td>' +
+                            '<td>' + data.avg + '</td>' +
+                            '<td>' + (data.infos[2017][0] === 0 ? '-' : data.infos[2017][0]) + '</td>' +
+                            '<td>' + (data.infos[2017][1] === 0 ? '-' : data.infos[2017][1]) + '</td>' +
+                            '<td>' + (data.infos[2017][2] === 0 ? '-' : data.infos[2017][2]) + '</td>' +
+                            '<td>' + (data.infos[2016][0] === 0 ? '-' : data.infos[2016][0]) + '</td>' +
+                            '<td>' + (data.infos[2016][1] === 0 ? '-' : data.infos[2016][1]) + '</td>' +
+                            '<td>' + (data.infos[2016][2] === 0 ? '-' : data.infos[2016][2]) + '</td>' +
+                            '<td>' + (data.infos[2015][0] === 0 ? '-' : data.infos[2015][0]) + '</td>' +
+                            '<td>' + (data.infos[2015][1] === 0 ? '-' : data.infos[2015][1]) + '</td>' +
+                            '<td>' + (data.infos[2015][2] === 0 ? '-' : data.infos[2015][2]) + '</td>' +
+                            '<td>' + (data.infos[2018][0] === 0 ? '-' : data.infos[2018][0]) + '</td>' +
+                            '<td>' + (data.infos[2018][1] === 0 ? '-' : data.infos[2018][1]) + '</td>';
+                        var findSig = false;
+                        for(var j = 0; j < 6; j++)
+                            if(selected[j][0] == data.name) {
+                                str += '<td style="padding: 2px"><button class="btn btn-sxp btn-sm"  style="padding: 5px 20px;" select-btn type="button"><span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;选择</button></td>';
+                                findSig = true;
+                                break;
+                            }
+                        if(!findSig)
+                            str += '<td style="padding: 2px"><button class="btn btn-default btn-sm"  style="padding: 5px 20px;" select-btn type="button"><span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;选择</button></td>';
+                        str += '</tr>'
+                    return str;
+                },
+                userHandle : {
+                    /**
+                     * 初始化事件 用于重置指针
+                     * @param data
+                     * @returns {*}
+                     */
+                    'initData': function (originalData) {
+                        return originalData;
+                    },
+                    /**
+                     * 搜索按名称学校
+                     * @param originalData
+                     * @returns {Array|any[]}
+                     */
+                    'searchSchool': function (originalData) {
+                        var name = $("#schoolName").val();
+                        var data = [];
+                        for (var i = 0; i < originalData.length; i++) {
+                            if (originalData[i].name.indexOf(name) !== -1) {
+                                data.push(originalData[i])
+                            }
+                        }
+                        return data;
+                    },
+                    /**
+                     * 筛选省份
+                     * @param originalData
+                     */
+                    'fetchProvince': function (originalData) {
+                        var pro = [];
+                        var data = [];
+                        $("#provinceFetch").find(".fetchbox-active").each(function () {
+                            if ($(this).html().indexOf("gly") === -1)
+                                pro.push($(this).html());
+                        })
+                        if (pro.length !== 0) {
+                            data = [];
+                            for (var i = 0; i < originalData.length; i++) {
+                                for (var j = 0; j < pro.length; j++)
+                                    if (originalData[i].address.indexOf(pro[j]) !== -1) {
+                                        data.push(originalData[i]);
+                                        break;
+                                    }
+                            }
+                        } else {
+                            data = originalData;
+                        }
+                        $(".modal-background").hide();
+
+                        return data;
+                    }
+                },
+                userHandleLocal : {
+
+                    'sortASC' : function(data) {
+                        var cel = $(sortTarget).parent().parent().find("th").index($(sortTarget).parent());
+                        data.sort(function(a, b) {
+                            if(cel == 3) {
+                                return a.rank - b.rank;
+                            } else if(cel == 4) {
+                                return a.avg - b.avg;
+                            } else if(cel == 5 || cel == 7) {
+                                return a.infos[2017][cel-5] - b.infos[2017][cel-5];
+                            } else if(cel == 8 || cel == 10) {
+                                return a.infos[2016][cel-8] - b.infos[2016][cel-8];
+                            } else if(cel == 11 || cel == 13) {
+                                return a.infos[2015][cel-11] - b.infos[2015][cel-11];
+                            } else {
+                                return a.infos[2018][0] - b.infos[2018][0];
+                            }
+                        })
+                        $(".glyphicon-sort-by-attributes-alt").each(function(){
+                            $(this).removeClass("glyphicon-sort-by-attributes-alt");
+                            $(this).addClass("glyphicon-sort-by-attributes");
+                        })
+                        $(sortTarget).removeClass("glyphicon-sort-by-attributes");
+                        $(sortTarget).addClass("glyphicon-sort-by-attributes-alt");
+
+                        return data;
+                    },
+                    'sortDESC' : function (data) {
+                        var cel = $(sortTarget).parent().parent().find("th").index($(sortTarget).parent());
+                        data.sort(function(a, b) {
+                            if(cel == 3) {
+                                return b.rank - a.rank;
+                            } else if(cel == 4) {
+                                return b.avg - a.avg;
+                            } else if(cel == 5 || cel == 7) {
+                                return b.infos[2017][cel-5] - a.infos[2017][cel-5];
+                            } else if(cel == 8 || cel == 10) {
+                                return b.infos[2016][cel-8] - a.infos[2016][cel-8];
+                            } else if(cel == 11 || cel == 13) {
+                                return b.infos[2015][cel-11] - a.infos[2015][cel-11];
+                            } else {
+                                return b.infos[2018][0] - a.infos[2018][0];
+                            }
+                        })
+                        $(".glyphicon-sort-by-attributes").each(function(){
+                            $(this).removeClass("glyphicon-sort-by-attributes");
+                            $(this).addClass("glyphicon-sort-by-attributes-alt");
+                        })
+                        $(sortTarget).removeClass("glyphicon-sort-by-attributes-alt");
+                        $(sortTarget).addClass("glyphicon-sort-by-attributes");
+                        return data;
+                    }
+                }
+            })
         }
     })
 
+    /**
+     * 填写志愿按钮被点击
+     */
     $('[data-toggle="fill"]').click(function () {
         var batch = $(this).parent().parent().parent().parent().prev().children().eq(0).children().eq(0).html();
         batch += $(this).parent().parent().parent().parent().prev().children().eq(1).children().eq(0).html();
         $("#batchName").html(batch);
         target = $(this).parent().parent().parent();
-        data = originalData;
-        init();
+
+        window.dispatchEvent( new Event('initData') );
         $("#listModal").modal();
     })
+
+    /**
+     * 发起搜索
+     */
     $("#search").click(function(){
-        searchBySchoolName($("#schoolName").val());
+        window.dispatchEvent( new Event('searchSchool'));
     })
 
     $("#schoolName").keyup(function() {
-        searchBySchoolName($("#schoolName").val());
+        window.dispatchEvent( new Event('searchSchool'));
     })
 
+    /**
+     * 优化体验，点击搜索框时，默认选中
+     */
     $("#schoolName").focus(function () {
         $(this).select();
     })
 
-    /**
-     * FireFox浏览器特殊 处理学校列表滚动
-     */
-    var stTarget = document.getElementById("schoolTable");
-    stTarget.addEventListener("DOMMouseScroll", function(event) {
-        wheelMove(event.detail)
-    });
 
     /**
-     * 其他浏览器
+     * 省份框点击时 赋予选中效果
      */
-    stTarget.onmousewheel = function(event) {
-        event = event || window.event;
-        wheelMove(-event.wheelDelta);
-    };
-
-    /**
-     * 处理专业列表滚动
-     */
-    var mtTarget = document.getElementById("majorTable");
-    mtTarget.addEventListener("DOMMouseScroll", function(event) {
-        majorWheelMove(event.detail)
-    });
-
-    /**
-     * 其他浏览器
-     */
-    mtTarget.onmousewheel = function(event) {
-        event = event || window.event;
-        majorWheelMove(-event.wheelDelta);
-    };
-
     $("#provinceFetch").on("click", "td", function(){
         if($(this).hasClass('fetchbox-active'))
             $(this).removeClass('fetchbox-active');
@@ -101,7 +218,7 @@ $(document).ready(function(){
     })
 
     /**
-     * 筛选省份
+     * 启动筛选省份的模态框
      */
     $(".glyphicon-th-list").click(function(){
         $("#provinceList").children(".border-shadow").css('position', 'fixed');
@@ -109,91 +226,34 @@ $(document).ready(function(){
         $("#provinceList").children(".border-shadow").css('left', $(this).offset().left - 300);
         $("#provinceList").fadeIn();
     })
+    /**
+     * 隐藏自定义modal
+     */
     $(".modal-background").click(function () {
         $(this).fadeOut();
     })
     /**
-     * 筛选省份
+     * 开始筛选省份
      */
     $("#fetch").click(function(){
-        var pro = new Array();
-        $("#provinceFetch").find(".fetchbox-active").each(function(){
-            if($(this).html().indexOf("gly") === -1)
-                pro.push($(this).html());
-        })
-        if(pro.length != 0) {
-            data = new Array();
-            for (var i = 0; i < originalData.length; i++) {
-                for (var j = 0; j < pro.length; j++)
-                    if (originalData[i].address.indexOf(pro[j]) !== -1) {
-                        data.push(originalData[i]);
-                        break;
-                    }
-            }
-        } else {
-            data = originalData;
-        }
-        init();
-        $(".modal-background").hide();
+        window.dispatchEvent( new Event('fetchProvince'));
     })
 
     /**
      * 排序
      */
     $("#schoolTable").on("click", ".glyphicon-sort-by-attributes", function(){
-        var cel = $(this).parent().parent().find("th").index($(this).parent());
-        data.sort(function(a, b) {
-            if(cel == 3) {
-                return a.rank - b.rank;
-            } else if(cel == 4) {
-                return a.avg - b.avg;
-            } else if(cel == 5 || cel == 7) {
-                return a.infos[2017][cel-5] - b.infos[2017][cel-5];
-            } else if(cel == 8 || cel == 10) {
-                return a.infos[2016][cel-8] - b.infos[2016][cel-8];
-            } else if(cel == 11 || cel == 13) {
-                return a.infos[2015][cel-11] - b.infos[2015][cel-11];
-            } else {
-                return a.infos[2018][0] - b.infos[2018][0];
-            }
-        })
-        $(".glyphicon-sort-by-attributes-alt").each(function(){
-            $(this).removeClass("glyphicon-sort-by-attributes-alt");
-            $(this).addClass("glyphicon-sort-by-attributes");
-        })
-        $(this).removeClass("glyphicon-sort-by-attributes");
-        $(this).addClass("glyphicon-sort-by-attributes-alt");
-        init();
+        sortTarget = $(this);
+        window.dispatchEvent( new Event("sortASC"));
     })
 
     $("#schoolTable").on("click", ".glyphicon-sort-by-attributes-alt", function(){
-        var cel = $(this).parent().parent().find("th").index($(this).parent());
-        data.sort(function(a, b) {
-            if(cel == 3) {
-                return b.rank - a.rank;
-            } else if(cel == 4) {
-                return b.avg - a.avg;
-            } else if(cel == 5 || cel == 7) {
-                return b.infos[2017][cel-5] - a.infos[2017][cel-5];
-            } else if(cel == 8 || cel == 10) {
-                return b.infos[2016][cel-8] - a.infos[2016][cel-8];
-            } else if(cel == 11 || cel == 13) {
-                return b.infos[2015][cel-11] - a.infos[2015][cel-11];
-            } else {
-                return b.infos[2018][0] - a.infos[2018][0];
-            }
-        })
-        $(".glyphicon-sort-by-attributes").each(function(){
-            $(this).removeClass("glyphicon-sort-by-attributes");
-            $(this).addClass("glyphicon-sort-by-attributes-alt");
-        })
-        $(this).removeClass("glyphicon-sort-by-attributes-alt");
-        $(this).addClass("glyphicon-sort-by-attributes");
-        init();
+        sortTarget = $(this);
+        window.dispatchEvent( new Event("sortDESC") );
     })
 
     $("#schoolTable").on("click", "[select-btn]", function(){
-        console.log(selected)
+
         $("#majorTable").children().eq(0).children(":gt(1)").remove();
         $("#majorTable").children().eq(0).append('<tr  class="text-center"><td colspan="15">数据请求中，请稍后</td></tr>')
 
@@ -339,86 +399,6 @@ $(document).ready(function(){
         $("#submit_info").html("保存中，请稍后......");
     })
 })
-
-function init() {
-    $("#progressBar").css("width", "0%");
-    $("#schoolTable").children().eq(0).children(":gt(1)").remove();
-    var str = '';
-    for(var i = 0; i < data.length; i++) {
-        str += '<tr hidden>' +
-            '<td>1%</td>' +
-            '<td>' + data[i].name + '</td>' +
-            '<td>' + data[i].address + '</td>' +
-            '<td>' + (data[i].rank == null ? '-' : data[i].rank) + '</td>' +
-            '<td>' + data[i].avg + '</td>' +
-            '<td>' + (data[i].infos[2017][0] === 0 ? '-' : data[i].infos[2017][0]) + '</td>' +
-            '<td>' + (data[i].infos[2017][1] === 0 ? '-' : data[i].infos[2017][1]) + '</td>' +
-            '<td>' + (data[i].infos[2017][2] === 0 ? '-' : data[i].infos[2017][2]) + '</td>' +
-            '<td>' + (data[i].infos[2016][0] === 0 ? '-' : data[i].infos[2016][0]) + '</td>' +
-            '<td>' + (data[i].infos[2016][1] === 0 ? '-' : data[i].infos[2016][1]) + '</td>' +
-            '<td>' + (data[i].infos[2016][2] === 0 ? '-' : data[i].infos[2016][2]) + '</td>' +
-            '<td>' + (data[i].infos[2015][0] === 0 ? '-' : data[i].infos[2015][0]) + '</td>' +
-            '<td>' + (data[i].infos[2015][1] === 0 ? '-' : data[i].infos[2015][1]) + '</td>' +
-            '<td>' + (data[i].infos[2015][2] === 0 ? '-' : data[i].infos[2015][2]) + '</td>' +
-            '<td>' + (data[i].infos[2018][0] === 0 ? '-' : data[i].infos[2018][0]) + '</td>' +
-            '<td>' + (data[i].infos[2018][1] === 0 ? '-' : data[i].infos[2018][1]) + '</td>';
-        var findSig = false;
-        for(var j = 0; j < 6; j++)
-            if(selected[j][0] == data[i].name) {
-                str += '<td style="padding: 2px"><button class="btn btn-sxp btn-sm"  style="padding: 5px 20px;" select-btn type="button"><span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;选择</button></td>';
-                findSig = true;
-                break;
-            }
-        if(!findSig)
-            str += '<td style="padding: 2px"><button class="btn btn-default btn-sm"  style="padding: 5px 20px;" select-btn type="button"><span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;选择</button></td>';
-        str += '</tr>'
-    }
-    virLeft = 1;
-    virRight = 17;
-    str += "<tr hidden class='text-center text-success'><td colspan='17'>到底啦~</td></tr>"
-    $("#schoolTable").append(str);
-    $("#schoolTable").children().eq(0).children(":lt("+virRight+")").show();
-
-}
-
-function searchBySchoolName(name) {
-    data = new Array();
-    for(var i = 0; i < originalData.length; i++) {
-        if(originalData[i].name.indexOf(name) !== -1) {
-            data.push(originalData[i])
-        }
-    }
-    init();
-}
-
-function wheelMove(angle) {
-    if(!$("#listModal").attr('hidden')) {
-        if(data.length <= 14) {
-            $("#progressBar").css("width", "0%");
-            return;
-        }
-        if(angle > 0) {
-            virLeft += 5;
-            virRight += 5;
-        } else {
-            virLeft -= 5;
-            virRight -= 5;
-        }
-        if(virLeft <= 1) {
-            virLeft = 1;
-            virRight = 17;
-        }
-        if(virRight >= data.length + 3) {
-            virLeft = data.length - 13;
-            virRight = data.length + 3;
-        }
-        $("#schoolTable").children().eq(0).children(":gt(1)").hide();
-        $("#schoolTable").children().eq(0).children(":lt("+virRight+"):gt("+virLeft+")").show();
-
-        var percentage = parseInt(virLeft * 100 / (data.length - 14));
-        $("#progressBar").css("width", percentage + "%");
-    }
-}
 
 function initMajor()
 {
