@@ -32,7 +32,8 @@ data中的数据一般是经过筛选，排序后的数据。页面渲染的时�
 | virLeft | int | 0  | 页面第一次渲染的起点 | 一般为0，特殊情况，自行更改 |
 | static | boolean |  true | 据滚动时，不请求数据，data中存放完整数据 | |
 | dataHandle | function | function(data){}  |告诉插件如何渲染数据 | 由于表格内容各种各样，所以如何渲染表格的每一行，有开发者自行决定，避免后端进行过多的计算 |
-| userHandle | array or object | {} | 告诉插件如何处理数据的自定义事件及其函数集合 | |
+| userHandle | array or object | {} | 告诉插件如何处理原始数据的自定义事件及其函数集合 | |
+| userHandle | array or object | {} | 告诉插件如何处理正在使用中数据的自定义事件及其函数集合 | |
 
 >必要参数就一个data，就可以让表格开始工作了。
 
@@ -111,3 +112,5 @@ $("#xxxx").dblclick(function(){
 ```
 
 修改数据的写法介绍如上，当需要更新数据时，请发出自定义事件（理解为信号可能跟贴切)。
+特别说明`userHandle`和`userHandleLocal`的区别在于，Local指定的是，已经被自定义事件修改过的数据，
+可能被筛选，可能被搜索过滤过，不同于原始数据。请根据实际开发需求采用不同的参数！

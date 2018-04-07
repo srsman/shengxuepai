@@ -1,3 +1,13 @@
+/**
+ * multiLineTable 多行数据浏览插件
+ * 版本：1.0.0
+ * 作者：gscsdlz
+ * 时间：2018-04-07
+ * 更新日志
+ * 1、支持鼠标翻页
+ * 2、支持自定义数据宽度
+ * 3、支持自定义事件，修改数据内容
+ */
 ;(function($) {
     $.fn.multiLineTable = function (options) {
         var defaults = {
