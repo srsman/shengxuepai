@@ -81,12 +81,10 @@ $(document).ready(function () {
     //设置bz的值
     $("#li_1").click(function(){
         bz = 0;
-        changeCategory_1();
     })
 
     $("#li_2").click(function(){
         bz = 1;
-        changeCategory_1();
     })
 
     //级联操作，下同
