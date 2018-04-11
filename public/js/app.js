@@ -22,4 +22,19 @@ $(document).ready(function(){
             $(this).css('background-position', '-10px -118px');    //hover
         }
     })
+
+
 })
+
+/**
+ * 平缓回到顶部
+ */
+function backTop() {
+    var start = document.documentElement.scrollTop;
+    var t = window.setInterval(function(){
+        window.scrollTo(start, start)
+        start -= 100;
+        if(start <= 0)
+            window.clearInterval(t);
+    }, 30);
+}
