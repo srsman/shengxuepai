@@ -144,3 +144,81 @@ p,td,tr,th,span{
     cursor: move;
     border-bottom: 1px solid black;
 }
+.sxp-list-group:hover {
+    color : rgb(78,201,142);
+    cursor: pointer;
+}
+.sxp-list-group-active {
+    color : rgb(78,201,142);
+}
+
+.loader {
+    border: .2em solid transparent;
+    border-top-color: currentcolor;
+    border-radius: 50%;
+    -webkit-animation: 1s loader linear infinite;
+    animation: 1s loader linear infinite;
+    position: relative;
+
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    color: inherit;
+    vertical-align: middle;
+    pointer-events: none;
+}
+
+.loader:before {
+    content: '';
+    display: block;
+    width: inherit;
+    height: inherit;
+    position: absolute;
+    top: -.2em;
+    left: -.2em;
+    border: .2em solid currentcolor;
+    border-radius: 50%;
+    opacity: .5;
+}
+
+@-webkit-keyframes loader {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes loader {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+
+.loader-box {
+    display: inline-block;
+    width: 200px;
+    height: 50px;
+    text-align: center;
+    border-radius: 3px;
+    font-size: 30px;
+    color: rgb(78,201,142);
+    position: relative;
+    vertical-align: top;
+    -webkit-transition: .3s color, .3s border, .3s transform, .3s opacity;
+    transition: .3s color, .3s border, .3s transform, .3s opacity;
+}
+
+.loader-box p {
+    font-size: 16px;
+    color: gray;
+}
