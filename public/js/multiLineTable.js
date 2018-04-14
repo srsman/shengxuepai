@@ -7,11 +7,11 @@
  * 1、支持鼠标翻页
  * 2、支持自定义数据宽度
  * 3、支持自定义事件，修改数据内容
+ * 4、删除自定义样式方式
  */
 ;(function($) {
     $.fn.multiLineTable = function (options) {
         var defaults = {
-            class : 'table table-bordered table-condensed ',
             title : [],
             titleLength : 1,
             data : [],
