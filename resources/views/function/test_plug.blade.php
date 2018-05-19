@@ -92,7 +92,6 @@
                 },
                 userHandle : {
                         'fetchSchool' : function(data){
-
                             var name = $("#schoolName").val();
                             var res = new Array();
                             for(var i = 0; i < data.length; i++) {

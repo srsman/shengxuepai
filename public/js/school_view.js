@@ -23,7 +23,7 @@ $(document).ready(function(){
                 wheelLength : 3,
                 dataHandle : function(d) {
                     var str = '<tr>' +
-                        '<td style="cursor: pointer">'+d.name+'</td>' +
+                        '<td schoolName style="cursor: pointer">'+d.name+'</td>' +
                         '<td>'+(d.ranking_1 == null ? '-' : d.ranking_1)+'</td>' +
                         '<td>'+(d.ranking_3 == null ? '-' : d.ranking_3)+'</td>' +
                         '<td>'+d.province + '-' + d.city +'</td>' +
@@ -175,6 +175,11 @@ $(document).ready(function(){
         level = selected[3];
 
         window.dispatchEvent(new Event("fetchAttr"));
+    })
+
+    $("#schoolInfo").on('click', '[schoolName]', function(){
+        var name = $(this).html();
+        window.location.href = URL + '/school/detail?name=' + encodeURI(name);
     })
 
 })

@@ -10,6 +10,9 @@ namespace App\Http\Controllers;
 
 
 use App\Model\SchoolBasicModel;
+use App\Model\SchoolMajorLevel;
+use App\Model\SchoolVideoModel;
+use App\Model\TeacherLevelModel;
 use Illuminate\Http\Request;
 
 class SchoolController extends Controller
@@ -67,6 +70,11 @@ class SchoolController extends Controller
         echo "ok";*/
     }
 
+    /**
+     * 获取学校的一些基本信息
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getSchool(Request $request)
     {
         $res = SchoolBasicModel::select('name', 'city', 'province', 'ranking_1', 'ranking_3', 'level', 'public', 'attr_num')
@@ -74,6 +82,35 @@ class SchoolController extends Controller
         return response()->json([
            'status' => true,
            'data' => $res,
+        ]);
+    }
+
+    public function detail(Request $request)
+    {
+        $sName = $request->get('name');
+        $sName = urldecode($sName);
+
+        $majorLevels = SchoolMajorLevel::select('*')->where('name', $sName)->first();
+
+        $t = SchoolBasicModel::select('c_xk_args')->where('name', $sName)->first();
+        $classNums = json_decode($t->c_xk_args);
+
+        $schoolBasic = SchoolBasicModel::select('name', 'city', 'province', 'ranking_1', 'ranking_2', 'ranking_3', 'level', 'public', 'attr_num', 's_z_url', 'zs_zc', 'zs_phone')
+            ->where('name', $sName)->first();
+
+        $teacherLevel = TeacherLevelModel::select('*')
+            ->where('name', $sName)->first();
+
+        $video = SchoolVideoModel::select('baike', 'content', 'video_html')
+            ->where('name', $sName)->first();
+
+
+        return view('function.school_detail', [
+            'majorLevels' => $majorLevels,
+            'classNums' => $classNums,
+            'basic' => $schoolBasic,
+            'teacherLevel' => $teacherLevel,
+            'video' => $video,
         ]);
     }
 }
