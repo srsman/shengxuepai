@@ -227,3 +227,35 @@ p,td,tr,th,span{
     color: rgb(78,201,142);
     font-size: 16px;
 }
+
+.rt{
+    margin-top: 20px;
+}
+
+.pad{
+    padding: 15px;
+    text-indent: 2rem;
+    letter-spacing: 2px;
+    line-height: 2rem;
+    font-size: 1.5rem;
+}
+
+.div_height{
+    height: 250px;
+    padding: 10px;
+    color:#555;
+    border: 1px solid #ddd;
+    margin-top: 1em;
+    letter-spacing: 2px;
+}
+
+.fill{
+    width: 100%;
+    height: 100px;
+    background-color: transparent;
+}
+
+.p_color{
+    cursor: pointer;
+    color:#337ab7;
+}
