@@ -1,4 +1,7 @@
 @extends('layout')
+@section('title')
+    {{ $basic->name }}
+@endsection
 @section('navbar')
     <li class="navbar-a-underline navbar-a-active"><a href="javascript:;">目&nbsp;&nbsp;&nbsp;标&nbsp;&nbsp;&nbsp;大&nbsp;&nbsp;&nbsp;学&nbsp;&nbsp;&nbsp;详&nbsp;&nbsp;&nbsp;情</a></li>
 @endsection
