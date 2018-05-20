@@ -86,6 +86,7 @@ class FillController extends Controller
      * 获取指定文、理科，和批次的学校列表及其基本信息
      * classify => [1 > 文科，2 > 理科]
      * batch => [0 > 提前批, 1 > 本一批, 2 > 本二批
+     * simple 提供简要信息
      * 这个接口只在每次页面进入时调用一次，将来可采用缓存
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -96,45 +97,77 @@ class FillController extends Controller
             'classify' => 'required|integer',
             'batch' => 'required|integer',
         ]);
-        $res = SchoolInfoModel::select('school_id', 'name', 'city', 'province', 'rank','score_arg', 'position_arg', 'num_arg','page', 'gz')
-            ->where([
-                ['classify', $request->get('classify')],
-                ['batch', $request->get('batch')],
-            ])->get();
 
-        $data = [];
-        foreach ($res as $row) {
-            $tmp = [];
-            $tmp['school_id'] = $row->school_id;
-            $tmp['name'] = $row->name;
-            $tmp['address'] = $row->province .'-'.$row->city;
-            $tmp['rank'] = $row->rank;
-            $s_array = json_decode($row->score_arg, true);
-            $p_array = json_decode($row->position_arg, true);
-            $n_array = json_decode($row->num_arg, true);
+        if ($request->get('simple')) {
+            $res = SchoolInfoModel::select('school_id', 'name', 'city', 'province', 'score_arg')
+                ->where([
+                    ['classify', $request->get('classify')],
+                    ['batch', $request->get('batch')],
+                ])->get();
 
-            $tmp['infos'] = [
-                '2017' => [
-                    $s_array['2017'],$p_array['2017'],$n_array['2017']
-                ],
-                '2016' => [
-                    $s_array['2016'],$p_array['2016'],$n_array['2016']
-                ],
-                '2015' => [
-                    $s_array['2015'],$p_array['2015'],$n_array['2015']
-                ],
-                '2018' => [
-                    $n_array['2018'], $row->page
-                ]
-            ];
+            $data = [];
+            foreach ($res as $row) {
+                $tmp = [];
+                $tmp['school_id'] = $row->school_id;
+                $tmp['name'] = $row->name;
+                $tmp['address'] = $row->province .'-'.$row->city;
+                $s_array = json_decode($row->score_arg, true);
 
-            $data[] = $tmp;
+                $tmp['infos'] = [
+                    $s_array['2017'],
+                    $s_array['2016'],
+                    $s_array['2015']
+                ];
+
+                $data[] = $tmp;
+            }
+
+            return response()->json([
+                'status' => true,
+                'data' => $data
+            ]);
+
+        } else {
+            $res = SchoolInfoModel::select('school_id', 'name', 'city', 'province', 'rank', 'score_arg', 'position_arg', 'num_arg', 'page', 'gz')
+                ->where([
+                    ['classify', $request->get('classify')],
+                    ['batch', $request->get('batch')],
+                ])->get();
+
+            $data = [];
+            foreach ($res as $row) {
+                $tmp = [];
+                $tmp['school_id'] = $row->school_id;
+                $tmp['name'] = $row->name;
+                $tmp['address'] = $row->province .'-'.$row->city;
+                $tmp['rank'] = $row->rank;
+                $s_array = json_decode($row->score_arg, true);
+                $p_array = json_decode($row->position_arg, true);
+                $n_array = json_decode($row->num_arg, true);
+
+                $tmp['infos'] = [
+                    '2017' => [
+                        $s_array['2017'],$p_array['2017'],$n_array['2017']
+                    ],
+                    '2016' => [
+                        $s_array['2016'],$p_array['2016'],$n_array['2016']
+                    ],
+                    '2015' => [
+                        $s_array['2015'],$p_array['2015'],$n_array['2015']
+                    ],
+                    '2018' => [
+                        $n_array['2018'], $row->page
+                    ]
+                ];
+
+                $data[] = $tmp;
+            }
+
+            return response()->json([
+                'status' => true,
+                'data' => $data
+            ]);
         }
-
-        return response()->json([
-            'status' => true,
-            'data' => $data
-        ]);
     }
 
     /**
