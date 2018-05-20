@@ -25,6 +25,7 @@
             dataHandle : function(data){},
             userHandle : {},
             userHandleLocal : {},
+            changeOriginal : function () {}
         };
         var settings = $.extend({}, defaults, options);
 
@@ -65,6 +66,16 @@
                 ' render(); ' +
                 '});');
         }
+
+        /**
+         * 修改原始数据
+         */
+        window.addEventListener("changeOriginalData", function(e) {
+            settings.originalData = settings.data = settings.changeOriginal();
+            virLeft = 0;
+            render();
+        })
+
         /**
          * 根据虚拟的左右指针渲染数据
          */
