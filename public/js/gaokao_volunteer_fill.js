@@ -416,6 +416,9 @@ $(document).ready(function(){
             selected[id / 2 - 1][1].push(majors[i]);
             $(target).children().eq( parseInt(i / 2) + 1).children().eq(i % 2 == 0 ? 1 : 3).children().eq(0).html(majors[i]);
         }
+        //解决由于专业减少带来的页面显示逻辑误差
+        for(var i = majors.length; i < 6; i++)
+            $(target).children().eq( parseInt(i / 2) + 1).children().eq(i % 2 == 0 ? 1 : 3).children().eq(0).html("");
         $("#majorList").fadeOut();
         $("#listModal").modal('hide');
     })
