@@ -36,7 +36,20 @@
                 </tr>
                 <tr>
                     <th class="text-center">院校名称</th>
-                    <th>招生批次</th>
+                    <th>
+                        <div class="dropdown">
+                            <li class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="list-style: none">
+                                招生批次
+                                <span class="caret"></span>
+                            </li>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="batch">
+                                <li><a href="javascript:void(0)">提前批</a></li>
+                                <li><a href="javascript:void(0)">本一批</a></li>
+                                <li><a href="javascript:void(0)">本二批</a></li>
+                                <li><a href="javascript:void(0)">全部批次</a></li>
+                            </ul>
+                        </div>
+                    </th>
                     <th class="text-center">所在地&nbsp;&nbsp;&nbsp;&nbsp;<span style="cursor: pointer" class="glyphicon glyphicon-th-list"></span></th>
                     <th class="text-center">2017年</th>
                     <th class="text-center">2016年</th>

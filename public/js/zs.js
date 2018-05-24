@@ -3,9 +3,9 @@
  */
 
 var sortTarget;
-var flag =0;
-var container=[];
-var del="<th class='text-center'>本地化率<span style='cursor: pointer' class='glyphicon glyphicon-sort-by-attributes'></span></th><th class='text-center'>川初审人数</th><th class='text-center'>川复试人数</th>";
+var flag = 2;
+var container = [];
+var del = "<th class='text-center'>本地化率<span style='cursor: pointer' class='glyphicon glyphicon-sort-by-attributes'></span></th><th class='text-center'>川初审人数</th><th class='text-center'>川复试人数</th>";
 
 $(document).ready(function () {
     $.get(URL+'/zs/get_school',function (response) {
@@ -17,8 +17,8 @@ $(document).ready(function () {
                 dataHandle:function (data) {
                     if(flag==0){
                         var str = '<tr>'+
-                            '<td>' + data.province + '</td>'+
                             '<td>' + data.name+'</td>' +
+                            '<td>' + data.province + '</td>'+
                             '<td>' + data.new_number + '</td>' +
                             '<td>' + data.new_first_pass + '</td>' +
                             '<td>' + (data.new_pass_lv === 0 ? '-' : data.new_pass_lv+ '%') + '</td>' +
@@ -31,8 +31,8 @@ $(document).ready(function () {
                             '</tr>';
                     }else if(flag==1){
                         var str = '<tr>'+
-                        '<td>' + data.province + '</td>'+
                         '<td>' + data.name+'</td>' +
+                        '<td>' + data.province + '</td>'+
                         '<td>' + (data.old_number === 0 ? '-' : data.old_number) + '</td>' +
                         '<td>' + (data.old_first_pass === 0 ? '-' : data.old_first_pass) + '</td>' +
                         '<td>' + (data.old_pass_lv === 0 ? '-' : data.old_pass_lv + '%') + '</td>' +
@@ -42,14 +42,14 @@ $(document).ready(function () {
                         '</tr>';
                     }else if(flag==2){
                         var str = '<tr>'+
-                            '<td>' + data.province + '</td>'+
                             '<td>' + data.name+'</td>' +
+                            '<td>' + data.province + '</td>'+
                             '<td>' + data.new_number + '</td>' +
                             '<td>' + data.new_first_pass + '</td>' +
                             '<td>' + (data.new_pass_lv === 0 ?'-' : data.new_pass_lv + '%') + '</td>' +
                             '<td>' + (data.new_plan_zs === 0 ? '-' : data.new_plan_zs) + '</td>' +
                             '<td>' + data.new_next_pass + '</td>' +
-                            '<td>' + (data.new_next_pass_lv === 0 ? '-' : data.new_next_pass_lv + '%') + '`</td>' +
+                            '<td>' + (data.new_next_pass_lv === 0 ? '-' : data.new_next_pass_lv + '%') + '</td>' +
                             '</tr>';
                     }
                     return str;
@@ -69,12 +69,12 @@ $(document).ready(function () {
                      * @returns {Array|any[]}
                      */
                     'searchSchool' : function(originalData){
-                        container='';
+                        container=[];
                         var name = $("#schoolName").val();
                         var data = [];
                         for(var i = 0; i < originalData.length; i++) {
                             if(originalData[i].name.indexOf(name) !== -1) {
-                                data.push(originalData[i])
+                                data.push(originalData[i]);
                             }
                         }
                         container=data;
@@ -85,7 +85,7 @@ $(document).ready(function () {
                      * @param originalData
                      */
                     'fetchProvince': function (originalData) {
-                        container='';
+                        container=[];
                         var pro = [];
                         var data = [];
                         $("#provinceFetch").find(".fetchbox-active").each(function () {
@@ -123,7 +123,7 @@ $(document).ready(function () {
                 userHandleLocal : {
 
                     'sortASC' : function(data) {
-                        container='';
+                        container=[];
                         var cel = $(sortTarget).parent().parent().find("th").index($(sortTarget).parent());
                         data.sort(function(a, b) {
                             if(cel == 2) {
@@ -147,18 +147,18 @@ $(document).ready(function () {
                             } else if(cel == 8) {
                                 return a.local_lv - b.local_lv;
                             }
-                        })
+                        });
                         $(".glyphicon-sort-by-attributes-alt").each(function(){
                             $(this).removeClass("glyphicon-sort-by-attributes-alt");
                             $(this).addClass("glyphicon-sort-by-attributes");
-                        })
+                        });
                         $(sortTarget).removeClass("glyphicon-sort-by-attributes");
                         $(sortTarget).addClass("glyphicon-sort-by-attributes-alt");
                         container=data;
                         return data;
                     },
                     'sortDESC' : function (data) {
-                        container='';
+                        container=[];
                         var cel = $(sortTarget).parent().parent().find("th").index($(sortTarget).parent());
                         data.sort(function(a, b) {
                             if(cel == 2) {
@@ -221,10 +221,14 @@ $(document).ready(function () {
     $("#search").click(function(){
         window.dispatchEvent( new Event("searchSchool"));
     });
+    $("#schoolName").keyup(function() {
+        window.dispatchEvent( new Event('searchSchool'));
+    });
     /**
      * 省份筛选
      */
     $("#fetch").click(function(){
+        // alert(1);
         window.dispatchEvent( new Event('fetchProvince'));
     });
     /**
@@ -254,10 +258,10 @@ $(document).ready(function () {
         var index = $(this).index();
         if(index == 1){
             flag = 1;
-            $("#schoolTable tr:first-child").children("th:gt(7)").remove();
+            // $("#schoolTable tr:first-child").children("th:gt(7)").remove();
         }else if(index == 0){
-            flag = 0;
-            $("#schoolTable tr:first-child").append(del);
+            flag = 2;
+            // $("#schoolTable tr:first-child").append(del);
         }
         window.dispatchEvent(new Event("Tab"));
     })

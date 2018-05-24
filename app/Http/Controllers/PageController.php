@@ -94,4 +94,9 @@ class PageController extends Controller
     {
         return view('function.class_select');
     }
+
+    public function buy()//界面
+    {
+        return view('function.buy');
+    }
 }

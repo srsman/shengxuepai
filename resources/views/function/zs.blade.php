@@ -28,17 +28,17 @@
         <div class="col-md-offset-2 col-md-8">
             <table class="table table-striped table-bordered text-center" id="schoolTable">
                 <tr>
-                    <th class="text-center">省份&nbsp;&nbsp;&nbsp;&nbsp;<span style="cursor: pointer" class="glyphicon glyphicon-th-list"></span></th>
                     <th class="text-center">院校名称</th>
+                    <th class="text-center">省份&nbsp;&nbsp;&nbsp;&nbsp;<span style="cursor: pointer" class="glyphicon glyphicon-th-list"></span></th>
                     <th class="text-center">报名人数<span style="cursor: pointer" class="glyphicon glyphicon-sort-by-attributes"></span></th>
                     <th class="text-center">初审通过人数</th>
                     <th class="text-center">初审通过率<span style="cursor: pointer" class="glyphicon glyphicon-sort-by-attributes"></span></th>
                     <th class="text-center">计划招生</th>
                     <th class="text-center">复试通过人数</th>
                     <th class="text-center">复试通过率<span style="cursor: pointer" class="glyphicon glyphicon-sort-by-attributes"></span></th>
-                    <th class="text-center">本地化率<span style="cursor: pointer" class="glyphicon glyphicon-sort-by-attributes"></span></th>
-                    <th class="text-center">川初审人数</th>
-                    <th class="text-center">川复试人数</th>
+                    {{--<th class="text-center">本地化率<span style="cursor: pointer" class="glyphicon glyphicon-sort-by-attributes"></span></th>--}}
+                    {{--<th class="text-center">川初审人数</th>--}}
+                    {{--<th class="text-center">川复试人数</th>--}}
                 </tr>
             </table>
             {{--<nav aria-label="...">--}}

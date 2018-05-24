@@ -23,7 +23,7 @@ class UserController extends Controller
         $username = $request->get('username');
         $password = $request->get('password');
 
-        $account = AccountModel::select('user_id', 'pass', 'user_type', 'vip')
+        $account = AccountModel::select('user_id', 'pass', 'user_type', 'vip', 'order_id')
             ->where('user', $username)
             ->orWhere('phone', $username)->first();
         if (!is_null($account)) {
@@ -36,6 +36,7 @@ class UserController extends Controller
                 Session::put('username', $account->username);
                 Session::put('user_type', $account->user_type);
                 Session::put('vip', $account->vip);
+                Session::put('order_id', $account->order_id);
 
                 if (!is_null($user)) { //激活用户
 
