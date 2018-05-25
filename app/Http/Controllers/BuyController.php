@@ -77,9 +77,8 @@ class BuyController extends Controller
             require_once dirname(__FILE__).'/../../Libs/Wxpay/example/log.php';
             $notify = new \NativePay();
             $input = new \WxPayUnifiedOrder();
-//            $input = new \UnifiedOrderInput();
             $input->SetBody("升学派金志愿卡");
-            $input->SetAttach(session('user_id'));//附加参数
+            $input->SetAttach(session("user_id"));//附加参数
             $input->SetOut_trade_no($_POST['order_id'].time());
 //            $input->SetOut_trade_no($_POST['order_number']);
             $input->SetTotal_fee("28000");
@@ -90,11 +89,23 @@ class BuyController extends Controller
             $input->SetTrade_type("NATIVE");
             $input->SetProduct_id("001");
             $result = $notify->GetPayUrl($input);
-            $url2 = $result['code_url'];
+            $url2 = $result["code_url"];
             return response()->json([
                 'status'=>true,
                 'url'=>$url2
             ]);
         }
+    }
+
+    //ajax轮询查看订单状态
+    public function state_change(Request $request){
+        $order_id = $request->order_id;
+        $account = AccountModel::select('user_type','is_pay')
+            ->where('order_id', $order_id)->get();
+        return response()->json([
+            'status'=>true,
+            'user_type'=>$account->user_type,
+            'is_pay'=>$account->is_pay
+        ]);
     }
 }

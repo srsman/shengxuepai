@@ -10,6 +10,8 @@ namespace App\Http\Controllers;
 
 use App\Libs\alipay\pagepay\service\AlipayTradeService;
 use Illuminate\Support\Facades\Session;
+use App\Libs\Wxpay\example\PayNotifyCallBack;
+use App\Model\AccountModel;
 
 class NotifyController extends Controller
 {
@@ -46,6 +48,7 @@ class NotifyController extends Controller
         }
         $this->display('tz');
     }
+
     //支付宝异步回调
     public function state_changeAction()
     {
@@ -63,13 +66,27 @@ class NotifyController extends Controller
             $trade_status = $_POST['trade_status'];
 
             if ($trade_status == 'TRADE_FINISHED' || $trade_status == 'TRADE_SUCCESS') {
-                $login = LoginModel::Instance();
-                $user = $login->query("update s_account set user_type = 1,is_pay = 1,vip=1,time_limit = 18 where order_id='" . $out_trade_no . "'");
+                AccountModel::where('order_id',$out_trade_no)
+                    ->update(['user_type' => 1,
+                        'is_pay' => 1,
+                        'vip' => 1,
+                        'time_limit' => 18]);
             }
             echo "success";    //请不要修改或删除
         } else {
             //验证失败
             echo "fail";
         }
+    }
+
+    //微信回调
+    public function wpAction(){
+//        file_put_contents("/home/awlog.txt", '---time:'.date('Y-m-d H:i:s',time()).'f'.$GLOBALS['HTTP_RAW_POST_DATA'].var_export($_POST,TRUE).PHP_EOL, FILE_APPEND);
+//        error_reporting(E_ALL);
+//        ini_set('display_errors', '1');
+//        require_once dirname(__FILE__).'/../../Libs/Wxpay/example/notify.php';
+//        file_put_contents("/home/awlog.txt", '---time:'.date('Y-m-d H:i:s',time()).'f'.$GLOBALS['HTTP_RAW_POST_DATA'].var_export($_POST,TRUE).PHP_EOL, FILE_APPEND);
+        $notify = new PayNotifyCallBack();
+        $notify->Handle(false);
     }
 }
