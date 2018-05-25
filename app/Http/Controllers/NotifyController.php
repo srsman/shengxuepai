@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Libs\alipay\pagepay\service\AlipayTradeService;
 use Illuminate\Support\Facades\Session;
 use App\Libs\Wxpay\example\PayNotifyCallBack;
@@ -50,7 +51,7 @@ class NotifyController extends Controller
     }
 
     //支付宝异步回调
-    public function state_changeAction()
+    public function state_change()
     {
         $arr = $_POST;
         $alipaySevice = new AlipayTradeService();
@@ -80,7 +81,7 @@ class NotifyController extends Controller
     }
 
     //微信回调
-    public function wpAction(){
+    public function wp(){
 //        file_put_contents("/home/awlog.txt", '---time:'.date('Y-m-d H:i:s',time()).'f'.$GLOBALS['HTTP_RAW_POST_DATA'].var_export($_POST,TRUE).PHP_EOL, FILE_APPEND);
 //        error_reporting(E_ALL);
 //        ini_set('display_errors', '1');
@@ -88,5 +89,16 @@ class NotifyController extends Controller
 //        file_put_contents("/home/awlog.txt", '---time:'.date('Y-m-d H:i:s',time()).'f'.$GLOBALS['HTTP_RAW_POST_DATA'].var_export($_POST,TRUE).PHP_EOL, FILE_APPEND);
         $notify = new PayNotifyCallBack();
         $notify->Handle(false);
+    }
+
+    //专业兴趣测评回调
+    public function accept(Request $request){
+        $report_id = $request->report_id;
+        $liangbiao = $request->liangbiao;
+        $test_email = $request->test_email;
+        $user_id = substr($test_email,14);
+        $account = AccountModel::where('user_id',$user_id)
+            ->update(['report_id' => $report_id,
+                    'liangbiao' => $liangbiao]);
     }
 }

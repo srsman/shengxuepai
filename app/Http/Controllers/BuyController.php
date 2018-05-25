@@ -102,10 +102,12 @@ class BuyController extends Controller
         $order_id = $request->order_id;
         $account = AccountModel::select('user_type','is_pay')
             ->where('order_id', $order_id)->get();
-        return response()->json([
-            'status'=>true,
-            'user_type'=>$account->user_type,
-            'is_pay'=>$account->is_pay
-        ]);
+        if($account){
+            return response()->json([
+                'status'=>true,
+                'user_type'=>$account->user_type,
+                'is_pay'=>$account->is_pay
+            ]);
+        }
     }
 }
