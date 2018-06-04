@@ -68,7 +68,7 @@ class PageController extends Controller
         return view('function.character_test');
     }
 
-    public function character_testing()//专业兴趣测评介绍界面
+    public function character_testing()//专业兴趣测评界面
     {
         $name = urlencode(iconv("utf-8","gbk//IGNORE",session('name')));
         $data=['name'=>$name,'classify'=>session('classify'),'id'=>date('YmdHis').session('user_id')];

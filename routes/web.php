@@ -48,6 +48,7 @@ Route::any('school/get','SchoolController@getSchool');//目标院校查询
 Route::any('major/get','MajorController@getMajors');//目标专业查询
 Route::any('cooperation/get_major','CooperationController@get_Major');//中外合作办学查询
 Route::any('character/get_report','CharacterController@get_report');//专业兴趣测评查询
+Route::any('/character/get_message','CharacterController@get_message');//专业兴趣测评模板渲染
 Route::any('Analysis/get_lever','AnalysisController@get_level');//我的成绩分析查询
 Route::any('rank/get_school','RankController@get_school');//院校排名查询
 Route::any('minority/get','MinorityController@get_school');//少数民族预科
@@ -56,3 +57,5 @@ Route::any('buy/get_order','BuyController@get_order');//获取订单号
 Route::any('buy/pay','BuyController@pay');//购买过程处理
 Route::any('login/tz','NotifyController@alipay');//支付宝回掉跳转
 Route::any('buy/state_change','BuyController@state_change');//微信支付ajax轮询查订单状态
+Route::any('mobie/state_change','BuyController@state_change');//支付宝移动支付回调页面
+Route::any('alipay/change','BuyController@state_change');//支付宝移动支付异步回调
