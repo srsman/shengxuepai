@@ -16,7 +16,7 @@ $(document).ready(function(){
                 _token : _token,
             }, function(response){
                 if(response.status == true) {
-                    window.location.href = URL + '/functions';
+                    window.location.href = URL + '/function';
                 } else {
                     $("#info").html(response.info)
                 }

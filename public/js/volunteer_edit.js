@@ -10,13 +10,23 @@ $(document).ready(function(){
     //优先请求数据 用于填报
     $.get(URL + "/fill/my_volunteer/456", function(response) {
         if(response.status) {
+            var oArg = [];
             for(var i = 0; i < 6; i++) {
                 selected[i] = [response.data[i]['s'], []];
+                $("#tableName").val(response.table_name);
+                oArg.push(response.data[i]['o']);
+                if(i == 0)
+                    oArg.push(response.data.o);
+
                 for(var j = 1; j <= 6; j++) {
                     selected[i][1].push( response.data[i]['m' + j] );
                 }
             }
-
+            $(".custom-checkbox").each(function(index, t) {
+                if(oArg[index] === 1) {
+                    $(t).css('background-position', '-10px -218px');
+                }
+            });
             for(var k = 1; k <= 6; k++) {
                 var that = $("#fillList").children().eq(2 * k).children().eq(1).children().eq(0);
 
@@ -478,7 +488,7 @@ $(document).ready(function(){
             $("#submit_info").html("还未填写任何内容");
             return;
         }
-        $.post(URL + "/fill/save_vol", {info:info, _token:_token, type:type,batch:batch,table_name:$("#tableName").val()}, function(response){
+        $.post(URL + "/fill/update_vol", {info:info, _token:_token, type:type,batch:batch,table_name:$("#tableName").val()}, function(response){
             if(response.status == true) {
                 $("#submit_info").html("保存成功");
             } else {

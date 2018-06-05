@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $(".img-up").mouseover(function () {
+   /* $(".img-up").mouseover(function () {
         var that = $(this);
         $("#zoom").hide();
         $("#zoom").attr('src', $(that).attr('src'));
@@ -13,5 +13,5 @@ $(document).ready(function () {
 
     $(".img-up").mouseout(function () {
         $("#zoom").hide();
-    })
+    })*/
 })

@@ -117,7 +117,7 @@ $(function () {
                 }
                 return str;
             },
-            userHandleLocal : {
+            userHandle : {
                 'initSchoolData' : function(originalData) {
                     return originalData;
                 },
@@ -127,56 +127,40 @@ $(function () {
                  * @returns {Array|any[]}
                  */
                 'searchSchool' : function(originalData){
-                    container='';
                     var name = $("#schoolName").val();
-                    var data = [];
+                    var school = [];
                     for(var i = 0; i < originalData.length; i++) {
-                        if(originalData[i].name.indexOf(name) !== -1) {
-                            data.push(originalData[i])
+                        if(originalData[i].school_name.indexOf(name) !== -1) {
+                            school.push(originalData[i])
                         }
                     }
-                    container=data;
-                    return data;
+                    return school;
                 },
                 /**
                  * 筛选省份
                  * @param originalData
                  */
                 'fetchProvince': function (originalData) {
-                    container='';
                     var pro = [];
-                    var data = [];
+                    var school = [];
                     $("#provinceFetch").find(".fetchbox-active").each(function () {
                         if ($(this).html().indexOf("gly") === -1)
                             pro.push($(this).html());
                     })
                     if (pro.length !== 0) {
-                        data = [];
                         for (var i = 0; i < originalData.length; i++) {
                             for (var j = 0; j < pro.length; j++)
                                 if (originalData[i].province.indexOf(pro[j]) !== -1) {
-                                    data.push(originalData[i]);
+                                    school.push(originalData[i]);
                                     break;
                                 }
                         }
                     } else {
-                        data = originalData;
+                        school = originalData;
                     }
                     $(".modal-background").hide();
-                    container=data;
-                    return data;
+                    return school;
                 },
-                /***
-                 * 选项卡
-                 */
-                'Tab':function (originalData) {
-                    if(container.length != ''){
-                        data = container;
-                    }else{
-                        data = originalData;
-                    }
-                    return data;
-                }
             }
         });
     }
@@ -195,7 +179,7 @@ $(function () {
             $.get(URL+'/rank/get_school?id='+index,function (response) {
                 if(response.data){
                     originalData[index] = response.data;
-                    show_school(originalData[index]);//院校数据展示
+                    show_school(originalData[index],index);//院校数据展示
                     $("#myModal").modal();
                 }
             })
@@ -216,7 +200,7 @@ $(function () {
                 '<div class="input-group-addon" id="search"><span class="glyphicon glyphicon-search"></span></div></div>' +
                 '</th>' +
                 '<th></th><th></th><th></th><th></th><th></th><th colspan="2"></th><th></th></tr>' +
-                '<tr><th>学校名称</th><th>院校排名</th><th>所在地</th><th>总分</th><th>办学类型</th><th>星级排名</th><th colspan="2">办学层次</th><th>办学性质</th>' +
+                '<tr><th class="text-center">学校名称</th><th class="text-center">院校排名</th><th class="text-center">所在地&nbsp;&nbsp;&nbsp;&nbsp;<span style="cursor: pointer" class="glyphicon glyphicon-th-list"></span></th><th class="text-center">总分</th><th class="text-center">办学类型</th><th class="text-center">星级排名</th><th colspan="2" class="text-center">办学层次</th><th class="text-center">办学性质</th>' +
                 '</tr></table>';
         }else if(index == 1){
             html = '<table class="table table-striped table-bordered text-center" id="schoolTable"><tr>' +
@@ -225,8 +209,8 @@ $(function () {
                 '<input type="text" class="form-control" placeholder="输入学校名称查询" id="schoolName">' +
                 '<div class="input-group-addon" id="search"><span class="glyphicon glyphicon-search"></span></div></div>' +
                 '</th>' +
-                '<th></th><th></th><th colspan="3">人才培养</th><th colspan="3">科学研究</th><th colspan="2">分省排名</th><th></th><th colspan="2">学校参考类型</th></tr>' +
-                '<tr><th>院校名称</th><th>院校排名</th><th>总得分</th><th>人才培养</th><th>研究生培养</th><th>本科生培养</th><th>科学研究</th><th>自然科学研究</th><th>社会科学研究</th><th>所在省份</th><th>排名</th><th>院校类型</th><th>类型1</th><th>类型2</th>' +
+                '<th></th><th></th><th colspan="3" class="text-center">人才培养</th><th colspan="3" class="text-center">科学研究</th><th colspan="2" class="text-center">分省排名</th><th></th><th colspan="2" class="text-center">学校参考类型</th></tr>' +
+                '<tr><th class="text-center">院校名称</th><th class="text-center">院校排名</th><th class="text-center">总得分</th><th class="text-center">人才培养</th><th class="text-center">研究生培养</th><th class="text-center">本科生培养</th><th class="text-center">科学研究</th><th class="text-center">自然科学研究</th><th class="text-center">社会科学研究</th><th class="text-center">所在省份&nbsp;&nbsp;&nbsp;&nbsp;<span style="cursor: pointer" class="glyphicon glyphicon-th-list"></span></th><th class="text-center">排名</th><th class="text-center">院校类型</th><th class="text-center">类型1</th><th class="text-center">类型2</th>' +
                 '</tr></table>';
         }else if(index == 2){
             html = '<table class="table table-striped table-bordered text-center" id="schoolTable"><tr>' +
@@ -236,7 +220,7 @@ $(function () {
                 '<div class="input-group-addon" id="search"><span class="glyphicon glyphicon-search"></span></div></div>' +
                 '</th>' +
                 '<th></th><th></th><th></th><th></th></tr>' +
-                '<tr><th>院校名称</th><th>所在省份</th><th>排名</th><th>总分</th><th>指标得分</th>' +
+                '<tr><th class="text-center">院校名称</th><th class="text-center">所在省份&nbsp;&nbsp;&nbsp;&nbsp;<span style="cursor: pointer" class="glyphicon glyphicon-th-list"></span></th><th class="text-center">排名</th><th class="text-center">总分</th><th class="text-center">指标得分</th>' +
                 '</tr></table>';
         }else if(index == 3){
             html = '<table class="table table-striped table-bordered text-center" id="schoolTable"><tr>' +
@@ -246,7 +230,7 @@ $(function () {
                 '<div class="input-group-addon" id="search"><span class="glyphicon glyphicon-search"></span></div></div>' +
                 '</th>' +
                 '<th></th><th></th><th></th><th></th><th></th><th></th></tr>' +
-                '<tr><th>院校名称</th><th>所在省份</th><th>排名</th><th>总分</th><th>办学类型</th><th>星级排名</th><th>办学层次</th>' +
+                '<tr><th class="text-center">院校名称</th><th class="text-center">所在省份&nbsp;&nbsp;&nbsp;&nbsp;<span style="cursor: pointer" class="glyphicon glyphicon-th-list"></span></th><th class="text-center">排名</th><th class="text-center">总分</th><th class="text-center">办学类型</th><th class="text-center">星级排名</th><th class="text-center">办学层次</th>' +
                 '</tr></table>';
         }else if(index == 4){
             html = '<table class="table table-striped table-bordered text-center" id="schoolTable"><tr>' +
@@ -255,8 +239,8 @@ $(function () {
                 '<input type="text" class="form-control" placeholder="输入学校名称查询" id="schoolName">' +
                 '<div class="input-group-addon" id="search"><span class="glyphicon glyphicon-search"></span></div></div>' +
                 '</th>' +
-                '<th></th><th></th><th></th><th></th><th colspan="2">分省排名</th><th></th><th colspan="2">学校参考类型</th></tr>' +
-                '<tr><th>院校名称</th><th>排名</th><th>总分</th><th>人才培养得分</th><th>科学研究得分</th><th>省份</th><th>排名</th><th>学校类型</th><th>类型1</th><th>类型2</th>' +
+                '<th></th><th></th><th></th><th></th><th colspan="2" class="text-center">分省排名</th><th></th><th colspan="2" class="text-center">学校参考类型</th></tr>' +
+                '<tr><th class="text-center">院校名称</th><th class="text-center">排名</th><th class="text-center">总分</th><th class="text-center">人才培养得分</th><th class="text-center">科学研究得分</th><th class="text-center">省份&nbsp;&nbsp;&nbsp;&nbsp;<span style="cursor: pointer" class="glyphicon glyphicon-th-list"></span></th><th class="text-center">排名</th><th class="text-center">学校类型</th><th class="text-center">类型1</th><th class="text-center">类型2</th>' +
                 '</tr></table>';
         }else if(index == 5){
             html = '<table class="table table-striped table-bordered text-center" id="schoolTable"><tr>' +
@@ -266,7 +250,7 @@ $(function () {
                 '<div class="input-group-addon" id="search"><span class="glyphicon glyphicon-search"></span></div></div>' +
                 '</th>' +
                 '<th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>' +
-                '<tr><th>院校名称</th><th>排名</th><th>所在省份</th><th>总分</th><th>办学类型</th><th>星级排名</th><th>办学性质</th><th>办学层次</th>' +
+                '<tr><th class="text-center">院校名称</th><th class="text-center">排名</th><th class="text-center">所在省份&nbsp;&nbsp;&nbsp;&nbsp;<span style="cursor: pointer" class="glyphicon glyphicon-th-list"></span></th><th class="text-center">总分</th><th class="text-center">办学类型</th><th class="text-center">星级排名</th><th class="text-center">办学性质</th><th class="text-center">办学层次</th>' +
                 '</tr></table>';
         }else if(index == 6){
             html = '<table class="table table-striped table-bordered text-center" id="schoolTable"><tr>' +
@@ -275,8 +259,8 @@ $(function () {
                 '<input type="text" class="form-control" placeholder="输入学校名称查询" id="schoolName">' +
                 '<div class="input-group-addon" id="search"><span class="glyphicon glyphicon-search"></span></div></div>' +
                 '</th>' +
-                '<th></th><th></th><th></th><th></th><th colspan="2">分省排名</th><th></th><th colspan="2">学校参考类型</th></tr>' +
-                '<tr><th>院校名称</th><th>排名</th><th>总分</th><th>人才培养得分</th><th>科学研究得分</th><th>省份</th><th>排名</th><th>学校类型</th><th>类型1</th><th>类型2</th>' +
+                '<th></th><th></th><th></th><th></th><th colspan="2" class="text-center">分省排名</th><th></th><th colspan="2" class="text-center">学校参考类型</th></tr>' +
+                '<tr><th class="text-center">院校名称</th><th class="text-center">排名</th><th class="text-center">总分</th><th class="text-center">人才培养得分</th><th class="text-center">科学研究得分</th class="text-center"><th class="text-center">省份&nbsp;&nbsp;&nbsp;&nbsp;<span style="cursor: pointer" class="glyphicon glyphicon-th-list"></span></th><th class="text-center">排名</th><th class="text-center">学校类型</th><th class="text-center">类型1</th><th class="text-center">类型2</th>' +
                 '</tr></table>';
         }else if(index == 7){
             html = '<table class="table table-striped table-bordered text-center" id="schoolTable"><tr>' +
@@ -286,9 +270,49 @@ $(function () {
                 '<div class="input-group-addon" id="search"><span class="glyphicon glyphicon-search"></span></div></div>' +
                 '</th>' +
                 '<th></th><th></th><th></th><th></th><th></th></tr>' +
-                '<tr><th>院校名称</th><th>院校代码</th><th>学科综合排名</th><th>学科均谊</th><th>七大类分布数</th><th>参评学科数</th>' +
+                '<tr><th class="text-center">院校名称</th><th class="text-center">院校代码</th><th class="text-center">学科综合排名</th><th class="text-center">学科均谊</th><th class="text-center">七大类分布数</th><th class="text-center">参评学科数</th>' +
                 '</tr></table>';
         }
         return html;
     }
+    /**
+     * 院校搜索
+     */
+    $("body").on("click","#search",function(){
+        window.dispatchEvent( new Event("searchSchool"));
+    });
+    $("body").on("keyup","#schoolName",function() {
+        window.dispatchEvent( new Event('searchSchool'));
+    });
+    /**
+     * 省份筛选
+     */
+    $("#fetch").click(function(){
+        window.dispatchEvent( new Event('fetchProvince'));
+    });
+    /**
+     * 省份框点击时 赋予选中效果
+     */
+    $("#provinceFetch").on("click", "td", function(){
+        if($(this).hasClass('fetchbox-active'))
+            $(this).removeClass('fetchbox-active');
+        else
+            $(this).addClass('fetchbox-active');
+        return false;
+    });
+    /**
+     * 省份模态框
+     */
+    $("body").on("click",'.glyphicon-th-list',function(){
+        $("#provinceList").children(".border-shadow").css('position', 'fixed');
+        $("#provinceList").children(".border-shadow").css('top', $(this).offset().top - document.documentElement.scrollTop+ 20);
+        $("#provinceList").children(".border-shadow").css('left', $(this).offset().left - 300);
+        $("#provinceList").fadeIn();
+    });
+    /**
+     * 隐藏自定义modal
+     */
+    $(".modal-background").click(function () {
+        $(this).fadeOut();
+    });
 });

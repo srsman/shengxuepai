@@ -259,3 +259,22 @@ p,td,tr,th,span{
     cursor: pointer;
     color:#337ab7;
 }
+
+.buy h4{
+        font-weight: 700;
+       letter-spacing: 2px;
+}
+
+.buy ul li{
+    list-style: none;
+    letter-spacing: 2px;
+}
+
+.pay{
+    /*position: relative;*/
+    cursor: pointer;
+}
+
+.bg_img{
+    background: url("http://localhost/sxp/images/project/rt.png") right bottom no-repeat;
+}

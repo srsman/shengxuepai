@@ -60,6 +60,59 @@
 </div>
 @endsection
 @section('modal')
+    <div class="modal-background" id="provinceList">
+        <div style="width:600px;padding: 20px;" class="border-shadow">
+            <table class="table text-center table-bordered fetchbox" id="provinceFetch">
+                <tr>
+                    <td>四川</td>
+                    <td>北京</td>
+                    <td>上海</td>
+                    <td>重庆</td>
+                    <td>天津</td>
+                    <td>福建</td>
+                    <td>黑龙江</td>
+                </tr>
+                <tr>
+                    <td>吉林</td>
+                    <td>辽宁</td>
+                    <td>山东</td>
+                    <td>山西</td>
+                    <td>陕西</td>
+                    <td>河北</td>
+                    <td>河南</td>
+                </tr>
+                <tr>
+                    <td>湖北</td>
+                    <td>湖南</td>
+                    <td>江苏</td>
+                    <td>江西</td>
+                    <td>广东</td>
+                    <td>广西</td>
+                    <td>云南</td>
+                </tr>
+                <tr>
+                    <td>海南</td>
+                    <td>贵州</td>
+                    <td>西藏</td>
+                    <td>宁夏</td>
+                    <td>甘肃</td>
+                    <td>青海</td>
+                    <td>内蒙古</td>
+                </tr>
+                <tr>
+                    <td>新疆</td>
+                    <td>安徽</td>
+                    <td>浙江</td>
+                    <td>香港</td>
+                    <td>澳门</td>
+                    <td>台湾</td>
+                    <td style="background-color: white; color:rgb(78,201,142);cursor: pointer" id="fetch">
+                        <span  class="glyphicon glyphicon-search"></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document" style="width: 80%">
             <div class="modal-content">
@@ -69,7 +122,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-sm-12" id="showTable">
+                        <div class="col-xs-12" id="showTable">
                             {{--<table class="table table-striped table-bordered text-center" id="schoolTable"></table>--}}
                         </div>
                     </div>

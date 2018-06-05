@@ -19,6 +19,15 @@ $(document).ready(function () {
         refresh_country();
     })
 
+    $.get(URL + "/user/get_info", function(response) {
+        if(response.status == true) {
+
+        } else {
+            alert("拉取用户基本信息失败，请重试");
+            window.location.reload();
+        }
+    })
+
 })
 
 function  refresh_province() {

@@ -78,7 +78,7 @@
                         <p id="submit_info" class="text-danger text-center"></p>
                     </div>
                     <div class="col-sm-2">
-                        <button class="btn btn-sxp" type="button" id="submit">保存</button>
+                        <button class="btn btn-sxp" type="button" id="submit">提交修改</button>
                     </div>
                 </div>
             </form>

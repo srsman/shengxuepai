@@ -74,7 +74,7 @@ $(document).ready(function () {
                             data = [];
                             for (var i = 0; i < originalData.length; i++) {
                                 for (var j = 0; j < pro.length; j++)
-                                    if (originalData[i].province.indexOf(pro[j]) !== -1) {
+                                    if (originalData[i].address.indexOf(pro[j]) !== -1) {
                                         data.push(originalData[i]);
                                         break;
                                     }
@@ -162,6 +162,9 @@ $(document).ready(function () {
      */
     $("#search").click(function(){
         window.dispatchEvent( new Event("searchSchool"));
+    });
+    $("#schoolName").keyup(function() {
+        window.dispatchEvent( new Event('searchSchool'));
     });
     /**
      * 省份筛选

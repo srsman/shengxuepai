@@ -7,6 +7,8 @@
  */
 
 namespace App\Http\Controllers;
+use Illuminate\Http\Request;
+
 /**
  * 静态页面调节路由
  * Class PageController
@@ -14,6 +16,18 @@ namespace App\Http\Controllers;
  */
 class PageController extends Controller
 {
+    public function page(Request $request)
+    {
+        $url = $request->server('REDIRECT_URL');
+        $url = trim($url, '/');
+        $args = explode('/', $url);
+        if  (count($args) == 2 && $args[0] == 'functions') {
+            return view('function.'.$args[1]);
+        } else {
+            return view($url);
+        }
+    }
+
     public function login()
     {
         return view('login');
@@ -68,7 +82,7 @@ class PageController extends Controller
         return view('function.character_test');
     }
 
-    public function character_testing()//专业兴趣测评介绍界面
+    public function character_testing()//专业兴趣测评界面
     {
         $name = urlencode(iconv("utf-8","gbk//IGNORE",session('name')));
         $data=['name'=>$name,'classify'=>session('classify'),'id'=>date('YmdHis').session('user_id')];
@@ -93,5 +107,30 @@ class PageController extends Controller
     public function class_select()//界面
     {
         return view('function.class_select');
+    }
+
+    public function buy()//界面
+    {
+        return view('function.buy');
+    }
+
+    public function change_info()
+    {
+        return view('change_info');
+    }
+
+    public function info()
+    {
+        return view('user_center');
+    }
+
+    public function compare()
+    {
+        return view('function.compare');
+    }
+
+    public function order()
+    {
+        return view('function.order');
     }
 }

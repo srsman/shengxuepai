@@ -16,7 +16,10 @@
     },
     "autoload": {
         "classmap": [
-            "database"
+            "database",
+            "app/Libs/dysms_php/api_demo/SmsDemo.php",
+            "app/Libs/alipay",
+            "app/Libs/"
         ],
         "psr-4": {
             "App\\": "app/"

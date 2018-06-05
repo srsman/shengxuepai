@@ -32,7 +32,7 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="navbar-a-underline"><a href="http://www.shengxuepai.cn">官&nbsp;&nbsp;网&nbsp;&nbsp;首&nbsp;&nbsp;页</a></li>
-                        <li class="navbar-a-underline @if(isset($menu) && $menu == 'function_list')navbar-a-active @endif"><a href="{{ URL('functions') }}">功&nbsp;&nbsp;能&nbsp;&nbsp;区&nbsp;&nbsp;域</a></li>
+                        <li class="navbar-a-underline @if(isset($menu) && $menu == 'function_list')navbar-a-active @endif"><a href="{{ URL('function') }}">功&nbsp;&nbsp;能&nbsp;&nbsp;区&nbsp;&nbsp;域</a></li>
                         @yield('navbar')
                         <li class="navbar-a-underline @if(isset($menu) && $menu == 'change_info')navbar-a-active @endif"><a href="{{ URL('change_info') }}">信&nbsp;&nbsp;息&nbsp;&nbsp;修&nbsp;&nbsp;改</a></li>
                         <li class="navbar-a-underline"><a href="#">帮&nbsp;&nbsp;助</a></li>
