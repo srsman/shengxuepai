@@ -23,7 +23,7 @@ Route::group(['middleware' => 'userLoginCheck'], function() {
     Route::get('gaokao_volunteer_fill','PageController@page');
     Route::get('school/detail', 'SchoolController@detail');
     Route::get('fill/get_major','FillController@getSchoolMajor');
-
+    Route::get('user/info', 'UserCoontroller@userInfo');
     ///////////静态页面 请求路由如下：
     Route::get('/function','PageController@functions');        //列表
 
@@ -43,7 +43,7 @@ Route::group(['middleware' => 'userLoginCheck'], function() {
     Route::get('functions/buy','PageController@page');              //购买界面
     Route::get('functions/my_volunteer','PageController@page');     //我的志愿表
     Route::get('change_info', 'PageController@change_info');
-    Route::get('user/info', 'PageController@info');
+
 
     Route::any('fill/get_school', 'FillController@getSchoolList');
     Route::any('/cooperation/get_school','CooperationController@get_school');//中外合作办学展示

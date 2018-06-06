@@ -226,4 +226,19 @@ class UserController extends Controller
         Session::put('code_time',time());
         return $code;
     }
+
+    /**
+     * 异步加载用户信息
+     * @param Request $request
+     */
+    public function userInfo(Request $request)
+    {
+        $data = UserModel::select('province', 'city', 'region', 'school', 'grade', 'class', 'name', 'sex', 'classify', 'year', 'score_arg')->first();
+
+        $data->score = json_decode($data->score_arg, true);
+
+        return view('user_center', [
+            'user' => $data,
+        ]);
+    }
 }
