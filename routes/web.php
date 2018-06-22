@@ -11,6 +11,7 @@
 |
 */
 
+Route::get('/', 'PageController@login');
 Route::get('login', 'PageController@login');
 Route::post('user/login', 'UserController@login');
 Route::post('user/register', 'UserController@register');
@@ -20,13 +21,21 @@ Route::post('user/forget', 'UserController@forget');
 Route::post('user/modify', 'UserController@modify');
 
 Route::group(['middleware' => 'userLoginCheck'], function() {
-    Route::get('gaokao_volunteer_fill','PageController@page');
+
+    Route::get('logout', 'UserController@logout');
+
+
     Route::get('school/detail', 'SchoolController@detail');
     Route::get('fill/get_major','FillController@getSchoolMajor');
-    Route::get('user/info', 'UserCoontroller@userInfo');
-    ///////////静态页面 请求路由如下：
-    Route::get('/function','PageController@functions');        //列表
+    Route::get('user/info', 'UserController@userInfo');
+    Route::get('user/secret', 'UserController@secret');
+    Route::post('user/rank', 'UserController@rank');  //高考位次查询
+    Route::post('user/update', 'UserController@update'); //更新用户信息
 
+
+    ///////////静态页面 请求路由如下：
+    Route::get('/functions','PageController@functions');        //列表
+    Route::get('functions/gaokao_volunteer_fill','PageController@page');  //高考志愿填报
     Route::get('functions/school_view','PageController@page');           //目标院校展示
     Route::get('functions/major_view','PageController@page');            //目标专业展示
     Route::get('functions/compare','PageController@page');          //目标专业展示

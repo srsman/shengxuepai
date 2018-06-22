@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 
 use App\Model\AccountModel;
 use App\Model\UserModel;
+use App\Model\WeiciModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -18,12 +19,18 @@ use App\Libs\dysms_php\api_demo\SmsDemo;
 
 class UserController extends Controller
 {
+    /**
+     * 用户登录
+     * gscsdlz
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function login(Request $request)
     {
         $username = $request->get('username');
         $password = $request->get('password');
 
-        $account = AccountModel::select('user_id', 'pass', 'user_type', 'order_id')
+        $account = AccountModel::select('user_id', 'pass', 'user_type', 'order_id', 'time_limit')
             ->where('user', $username)
             ->orWhere('phone', $username)->first();
         if (!is_null($account)) {
@@ -36,6 +43,7 @@ class UserController extends Controller
                 Session::put('username', $account->username);
                 Session::put('user_type', $account->user_type);
                 Session::put('order_id', $account->order_id);
+                Session::put('time_limit', $account->time_limit == 0 ? '99' : $account->time_limit);
 
                 if (!is_null($user)) { //激活用户
 
@@ -228,17 +236,132 @@ class UserController extends Controller
     }
 
     /**
-     * 异步加载用户信息
+     * 加载用户信息
+     * gscsdlz
      * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function userInfo(Request $request)
     {
-        $data = UserModel::select('province', 'city', 'region', 'school', 'grade', 'class', 'name', 'sex', 'classify', 'year', 'score_arg')->first();
+        $data = UserModel::select('province', 'city', 'region', 'school', 'grade', 'class', 'name', 'sex', 'classify', 'year', 'score_arg', 'rank_arg')
+            ->where('user_id', Session::get('user_id'))
+            ->first();
 
         $data->score = json_decode($data->score_arg, true);
+        $data->rank = json_decode($data->rank_arg, true);
 
         return view('user_center', [
             'user' => $data,
         ]);
+    }
+
+    /**
+     * 根据指定文理科和分数返回位次
+     * gscsdlz
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function rank(Request $request)
+    {
+        $score = $request->get('score');
+        $type = $request->get('type');
+
+        $rank = WeiciModel::select('count')->where([
+            ['score', $score],
+            ['type', $type],
+        ])->first();
+
+        if(is_null($rank)) {
+            return response()->json([
+                'status' => false,
+            ]);
+        }
+
+        return response()->json([
+            'status' => true,
+            'rank' => $rank->count
+        ]);
+    }
+
+    /**
+     * 更新用户信息
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request)
+    {
+
+        $grade = $request->get('grade');
+        $sex = $request->get('sex');
+        $classify = $request->get('type');
+        $year= $request->get('year');
+
+        //表单简要校验
+        if (!preg_match('[1|2|3]', $grade)
+            || !preg_match('[1|2]', $sex)
+            || !preg_match('[1|2]', $classify)
+            || !preg_match('/^20\d\d$/', $year)
+        ) {
+            return response()->json([
+                'status' => false
+            ]);
+        }
+        $args = UserModel::select('score_arg', 'rank_arg')->where('user_id', Session::get('user_id'))->first();
+        $scores = json_decode($args->score_arg, true);
+        $ranks = json_decode($args->rank_arg, true);
+
+        $score = $request->get('score');
+        if($score >= 0 && $score <= 750) {
+            $scores['score'] = $score;
+            $ranks['rank'] = $request->get('rank');
+
+            $scores = json_encode($scores);
+            $ranks = json_encode($ranks);
+
+        } else {
+            return response()->json([
+               'status' => false
+            ]);
+        }
+
+        UserModel::where('user_id', Session::get('user_id'))
+            ->update([
+               'province' => $request->get('province'),
+                'city' => $request->get('city'),
+                'region' => $request->get('country'),
+                'school' => $request->get('school'),
+                'grade'=> $grade,
+                'class'=> $request->get('classes'),
+                'name'=> $request->get('name'),
+                'sex'=> $sex,
+                'classify'=> $classify,
+                'year'=> $year,
+                'score_arg' => $scores,
+                'rank_arg' => $ranks
+            ]);
+
+
+        //刷新Session
+        Session::put('name', $request->get('name'));
+        Session::put('sex', $sex == 1 ? '男' : '女');
+        Session::put('school', $request->get('school'));
+        Session::put('year', $year);
+        Session::put('classify', $classify == 1 ? '文科' : '理科');
+        Session::put('rank',$request->get('rank'));
+
+        return response()->json([
+            'status' => true
+        ]);
+    }
+
+    public function secret(Request $request)
+    {
+        return view('secret_center');
+    }
+
+    public function logout(Request $request)
+    {
+        Session::flush();
+        return response()->redirectTo('/login');
     }
 }

@@ -1,4 +1,7 @@
 @extends('layout')
+@section('title')
+    功能区域
+@endsection
 @section('main')
     <img id="zoom"  width="400px" style="position: absolute;z-index: 1;">
     <div class="row">

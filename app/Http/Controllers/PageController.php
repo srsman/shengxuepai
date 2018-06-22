@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 /**
  * 静态页面调节路由
@@ -30,6 +31,8 @@ class PageController extends Controller
 
     public function login()
     {
+        if(Session::has('user_id'))
+            return response()->redirectTo('functions');
         return view('login');
     }
 

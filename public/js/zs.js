@@ -11,6 +11,7 @@ $(document).ready(function () {
     $.get(URL+'/zs/get_school',function (response) {
         if(response.status==true){
             $("#schoolTable").multiLineTable({
+                titleLength:0,
                 data:response.data,
                 length:10,
                 wheelLength : 5,
