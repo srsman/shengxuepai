@@ -8,7 +8,7 @@
         <div class="col-md-6 col-md-offset-3">
             <div class="row">
                 <div class="col-sm-4 text-center">
-                    <img class="img-up" width="100%" onclick="window.location.href='{{ URL('functions/gaokao_volunteer_fill') }}'" src="{{ URL::asset('images/project/functions/1.png') }}" />
+                    <img class="img-up" width="100%" onclick="window.location.href='{{ URL('fill/volunteer_select') }}'" src="{{ URL::asset('images/project/functions/1.png') }}" />
                 </div>
                 <div class="col-sm-4 text-center">
                     <img class="img-up" width="100%" src="{{ URL::asset('images/project/functions/2.png') }}" />

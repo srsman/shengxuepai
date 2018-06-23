@@ -1,20 +1,19 @@
 @extends('layout')
 @section('title')
-高考成绩智能填报-升学派
+高考成绩智能填报
 @endsection
 @section('navbar')
-    <li class="navbar-a-underline navbar-a-active"><a href="javascript:;">高&nbsp;&nbsp;&nbsp;考&nbsp;&nbsp;&nbsp;成&nbsp;&nbsp;&nbsp;绩&nbsp;&nbsp;&nbsp;智&nbsp;&nbsp;&nbsp;能&nbsp;&nbsp;&nbsp;填&nbsp;&nbsp;&nbsp;报</a></li>
+    <li class="navbar-a-underline navbar-a-active"><a href="javascript:;">高考成绩智能填报</a></li>
 @endsection
 @section('main')
     <div class="row">
         <div class="col-md-8 col-md-offset-2 border-shadow" id="fillList">
-            <h3 class="text-center"><b>本科第一批·志愿填报</b></h3>
-
+            <h3 class="text-center"><b>{{ $batchName }}·志愿填报</b></h3>
             @for($i = 1; $i <= 6; $i++)
                 <hr/>
             <div class="row">
                 <div class="col-sm-3 text-center" style="position: relative;top: 50%;transform: translateY(100%);">
-                    <h4><b>第{{ $i }}志愿{{ chr(ord('A') + $i - 1) }}</b></h4>
+                    <h4><b>第{{ mb_substr($nums, $i - 1, 1) }}志愿 {{ chr(ord('A') + $i - 1) }}</b></h4>
                     <h4><b>平行志愿</b></h4>
                 </div>
                 <div class="col-sm-9" style="border-left: 1px solid rgb(220,220,220)">
@@ -282,9 +281,9 @@
 @endsection
 @section('script')
 <script>
-    var type = 1;
-    var classify = 2;
-    var batch = 1;
+    var type = "{{ $type }}";
+    var classify = "{{ Session::get('classify') == '文科' ? 1 : 2 }}";
+    var batch = "{{ $batch }}";
 </script>
-<script src="{{ URL::asset('./js/gaokao_volunteer_fill.js') }}"></script>
+<script src="{{ URL::asset('./js/volunteer_fill.js') }}"></script>
 @endsection

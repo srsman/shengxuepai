@@ -9,6 +9,8 @@
 namespace App\Http\Controllers;
 use App\Model\MajorInfoModel;
 use App\Model\SchoolInfoModel;
+use App\Model\ScoreBasicModel;
+use App\Model\UserModel;
 use App\Model\VolunteerModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -236,4 +238,67 @@ class FillController extends Controller
         ]);
 
     }
+
+    /**
+     * 志愿选择方法，根据指定分数选择合理的批次，并安排下一个页面的数据来源
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function volunteerSelect(Request $request)
+    {
+        $scores = ScoreBasicModel::select('score', 'name', 'type', 'batch')
+            ->where([
+                ['year', '2017'],
+                ['type', Session::get('classify') == '文科' ? 1 : 2]
+            ])->get();
+        $score = UserModel::select('score_arg')->where('user_id', Session::get('user_id'))->first();
+
+        $score = json_decode($score->score_arg, true);
+
+        if (isset($score['score'])) {
+
+            $flagName = $scores[0]->name;
+
+            foreach ($scores as $row) {
+                if ($score['score'] <= $row->score) {
+                    $flagName = $row->name;
+                }
+            }
+
+            return view('function.volunteer_select', [
+                'scores' => $scores,
+                'flag' => $flagName,
+            ]);
+        } else {   //没有填写分数
+            return view('info', [
+                'info' => '您还有填写高考成绩，3s后将会自动跳转到个人信息页面。<br/>如果没有跳转，<a href="'.URL('user/info').'">请点击这里</a>',
+                'url' => URL('user/info')
+            ]);   //填写高考信息
+        }
+    }
+
+    public function volunteerAdd(Request $request, $type, $batch)
+    {
+        if ($type == 'gaokao')
+            $t = 1;
+        else
+            $t = 2;
+        if ($batch == 0)
+            $name = "本科提前批";
+        else if ($batch == 1)
+            $name = "本科第一批";
+        else if ($batch == 2)
+            $name = "本科第二批";
+        else
+            $name = "专科第一批";
+
+        return view('function.volunteer_fill', [
+            'type' => $t,
+            'batch' => (int)$batch,
+            'batchName' => $name,
+            'nums' => "一二三四五六"
+
+        ]);
+    }
+
 }

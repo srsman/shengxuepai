@@ -10,7 +10,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', 'PageController@login');
 Route::get('login', 'PageController@login');
 Route::post('user/login', 'UserController@login');
@@ -19,6 +18,8 @@ Route::post('user/send', 'UserController@sms');
 Route::post('user/check', 'UserController@check');
 Route::post('user/forget', 'UserController@forget');
 Route::post('user/modify', 'UserController@modify');
+Route::get('buy','PageController@buy');              //购买界面
+
 
 Route::group(['middleware' => 'userLoginCheck'], function() {
 
@@ -27,6 +28,10 @@ Route::group(['middleware' => 'userLoginCheck'], function() {
 
     Route::get('school/detail', 'SchoolController@detail');
     Route::get('fill/get_major','FillController@getSchoolMajor');
+    Route::any('fill/get_school', 'FillController@getSchoolList');
+    Route::any('fill/volunteer_select', 'FillController@volunteerSelect');
+    Route::any('fill/add/{type}/{batch}', 'FillController@volunteerAdd');
+
     Route::get('user/info', 'UserController@userInfo');
     Route::get('user/secret', 'UserController@secret');
     Route::post('user/rank', 'UserController@rank');  //高考位次查询
@@ -34,29 +39,14 @@ Route::group(['middleware' => 'userLoginCheck'], function() {
 
 
     ///////////静态页面 请求路由如下：
-    Route::get('/functions','PageController@functions');        //列表
-    Route::get('functions/gaokao_volunteer_fill','PageController@page');  //高考志愿填报
-    Route::get('functions/school_view','PageController@page');           //目标院校展示
-    Route::get('functions/major_view','PageController@page');            //目标专业展示
-    Route::get('functions/compare','PageController@page');          //目标专业展示
-    Route::get('functions/order', 'PageController@page');           //一对一专家预约
-    Route::get('functions/cooperation','PageController@page');      //中外合作办学展示
-    Route::get('functions/character_test','PageController@page');   //专业兴趣测评介绍界面
+    Route::get('functions/{pageName?}','PageController@page');  //静态页面
+   // Route::get('functions/character_testing','CharacterController@get_report');          //专业兴趣测评界面
 
-    Route::get('functions/character_testing','CharacterController@get_report');          //专业兴趣测评界面
-    Route::get('functions/score_report','PageController@page');        //我的成绩分析界面
-    Route::get('functions/university_rank','PageController@page');             //中国大学排行榜界面
-    Route::get('functions/minority','PageController@page');         //少数民族预科
-    Route::get('functions/class_select','PageController@page');     //国家专项界面
-    Route::get('functions/zs','PageController@page');               //自主招生展示
-    Route::get('functions/buy','PageController@page');              //购买界面
-    Route::get('functions/my_volunteer','PageController@page');     //我的志愿表
     Route::get('change_info', 'PageController@change_info');
 
 
-    Route::any('fill/get_school', 'FillController@getSchoolList');
+
     Route::any('/cooperation/get_school','CooperationController@get_school');//中外合作办学展示
-//Route::any('zs/zz','ZsController@zz');//自招数据处理
     Route::any('zs/get_school','ZsController@get_school');//自主招生院校数据查询
     Route::any('school/get','SchoolController@getSchool');//目标院校查询
     Route::any('major/get','MajorController@getMajors');//目标专业查询

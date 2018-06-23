@@ -3,7 +3,7 @@
     我的志愿表
 @endsection
 @section('navbar')
-    <li class="navbar-a-underline navbar-a-active"><a href="javascript:;">我&nbsp;&nbsp;&nbsp;的&nbsp;&nbsp;&nbsp;志&nbsp;&nbsp;&nbsp;愿&nbsp;&nbsp;&nbsp;表</a></li>
+    <li class="navbar-a-underline navbar-a-active"><a href="javascript:;">我的志愿表</a></li>
 @endsection
 @section('main')
     <div class="row">

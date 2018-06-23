@@ -179,7 +179,7 @@ $(document).ready(function(){
 
     $("#schoolInfo").on('click', '[schoolName]', function(){
         var name = $(this).html();
-        window.location.href = URL + '/school/detail?name=' + encodeURI(name);
+        window.open(URL + '/school/detail?name=' + encodeURI(name));
     })
 
 })

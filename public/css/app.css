@@ -49,6 +49,7 @@ p,td,tr,th,span{
 .navbar-a-underline {
     font-size: 16px;
     margin:0px 10px;
+    letter-spacing: 15px;
 }
 .navbar-default .navbar-nav > li > a {
     color: black;

@@ -7,7 +7,7 @@
 @endsection
 @section('main')
 <div class="row">
-    <p class="text-center h4">请购买金志愿卡</p>
+    <h3 class="text-center">请购买金志愿卡</h3>
     <div class="col-md-offset-2 col-md-8">
         <div class="row">
             <div class="col-sm-offset-3 col-xs-offset-3 col-sm-3 col-xs-3">
@@ -19,6 +19,7 @@
                 <p class="text-center rt">金志愿卡B面</p>
             </div>
         </div>
+        <hr/>
         <div class="row">
             <div class="col-md-offset-2 col-md-10 buy">
                 <h4>升学派“金志愿卡”简介：</h4>
@@ -54,7 +55,7 @@
             </div>
         </div>
         <div class="row rt text-center">
-            <button class="btn btn-lg btn-info" style="letter-spacing: 2px" data-toggle="modal" id="buy">立即购买</button>
+            <button class="btn btn-lg btn-sxp" style="letter-spacing: 2px" data-toggle="modal" id="buy">立即购买</button>
         </div>
     </div>
 </div>
@@ -110,9 +111,5 @@
 </div>
 @endsection
 @section('script')
-<script>
-    var  _token = "{{ csrf_token() }}";
-    var URL = "{{ URL('/') }}";
-</script>
 <script src="{{ URL::asset('js/buy.js') }}"></script>
 @endsection

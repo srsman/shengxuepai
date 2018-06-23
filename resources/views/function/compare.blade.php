@@ -3,7 +3,7 @@
     不同院校对比
 @endsection
 @section('navbar')
-    <li class="navbar-a-underline navbar-a-active"><a href="javascript:;">不&nbsp;&nbsp;&nbsp;同&nbsp;&nbsp;&nbsp;院&nbsp;&nbsp;&nbsp;校&nbsp;&nbsp;&nbsp;对&nbsp;&nbsp;&nbsp;比</a></li>
+    <li class="navbar-a-underline navbar-a-active"><a href="javascript:;">不同院校对比</a></li>
 @endsection
 @section('main')
     <div class="row">

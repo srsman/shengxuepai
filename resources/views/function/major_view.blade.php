@@ -3,7 +3,7 @@
 目标专业查询
 @endsection
 @section('navbar')
-    <li class="navbar-a-underline navbar-a-active"><a href="javascript:;">目&nbsp;&nbsp;&nbsp;标&nbsp;&nbsp;&nbsp;专&nbsp;&nbsp;&nbsp;业&nbsp;&nbsp;&nbsp;查&nbsp;&nbsp;&nbsp;询</a></li>
+    <li class="navbar-a-underline navbar-a-active"><a href="javascript:;">目标专业查询</a></li>
 @endsection
 @section('main')
     <div class="row">

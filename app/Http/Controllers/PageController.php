@@ -17,15 +17,18 @@ use Illuminate\Support\Facades\Session;
  */
 class PageController extends Controller
 {
-    public function page(Request $request)
+    /**
+     * 静态页面主要方法
+     * @param Request $request
+     * @param $pageName
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function page(Request $request, $pageName = null)
     {
-        $url = $request->server('REDIRECT_URL');
-        $url = trim($url, '/');
-        $args = explode('/', $url);
-        if  (count($args) == 2 && $args[0] == 'functions') {
-            return view('function.'.$args[1]);
+        if (is_null($pageName)) {
+            return view('function_list');
         } else {
-            return view($url);
+            return view('function.'.$pageName);
         }
     }
 
@@ -36,13 +39,6 @@ class PageController extends Controller
         return view('login');
     }
 
-    public function functions()
-    {
-        return view('function_list', [
-            'menu' => 'function_list',
-        ]);
-    }
-
     public function changeInfo()
     {
         return view('change_info', [
@@ -50,71 +46,12 @@ class PageController extends Controller
         ]);
     }
 
-    public function gaokaoVolunteerFill()
-    {
-        return view('function.gaokao_volunteer_fill');
-    }
-
-    public function test_plug()
-    {
-        return view('function.test_plug');
-    }
-
-    public function major()
-    {
-        return view('function.major_view');
-    }
-
-    public function school()
-    {
-        return view('function.school_view');
-    }
-
-    public function zz()//自主招生页面
-    {
-        return view('function.zs');
-    }
-
-    public function cooperation()//中外合作办学界面
-    {
-        return view('function.cooperation');
-    }
-
-    public function character_test()//专业兴趣测评介绍界面
-    {
-        return view('function.character_test');
-    }
 
     public function character_testing()//专业兴趣测评界面
     {
         $name = urlencode(iconv("utf-8","gbk//IGNORE",session('name')));
         $data=['name'=>$name,'classify'=>session('classify'),'id'=>date('YmdHis').session('user_id')];
         return view('function.character_testing')->with('data',$data);
-    }
-
-    public function score_report()//我的成绩分析界面
-    {
-        return view('function.score_report');
-    }
-
-    public function rank()//中国大学排行榜界面
-    {
-        return view('function.university_rank');
-    }
-
-    public function monority()//中国大学排行榜界面
-    {
-        return view('function.minority');
-    }
-
-    public function class_select()//界面
-    {
-        return view('function.class_select');
-    }
-
-    public function buy()//界面
-    {
-        return view('function.buy');
     }
 
     public function change_info()
@@ -127,13 +64,4 @@ class PageController extends Controller
         return view('user_center');
     }
 
-    public function compare()
-    {
-        return view('function.compare');
-    }
-
-    public function order()
-    {
-        return view('function.order');
-    }
 }

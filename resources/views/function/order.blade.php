@@ -3,7 +3,7 @@
     一对一专家预约
 @endsection
 @section('navbar')
-    <li class="navbar-a-underline navbar-a-active"><a href="javascript:;">一&nbsp;&nbsp;&nbsp;对&nbsp;&nbsp;&nbsp;一&nbsp;&nbsp;&nbsp;专&nbsp;&nbsp;&nbsp;家&nbsp;&nbsp;&nbsp;预&nbsp;&nbsp;&nbsp;约</a></li>
+    <li class="navbar-a-underline navbar-a-active"><a href="javascript:;">一对一专家预约</a></li>
 @endsection
 @section('main')
     <div class="row">
